@@ -3,6 +3,7 @@
 ##################################################################################
 library(dplyr)
 library(stringi)
+library(foreign)
 library(stringr)
 #####################################################################################
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
