@@ -125,6 +125,107 @@ prof_degree_pct - Percentage of the population with a professional degree, such 
 phd_degree_pct - Percentage of the population with a PhD. 
 
 
+# econ_acs_cleaned
+
+A csv/rds file with additional ACS information related to economic indicators by county. The fields are broken into counts and percents. 
+
+## ID variables 
+
+Geo_FIPS - The five digit fips code for the county. First two digits reflect the state fip code, and the last three the county identifier. Note: Might have to string pad if reading the csv. 
+
+Geo_GEOID - The census long form id for a county. Better just to use the Geo_FIPS, but is present just in case. 
+
+Geo_NAME - The name of the county 
+
+Geo_QName - The name of the county, followed by the state name. 
+
+Geo_STUSAB - The state postal code for the state, abbreviated. 
+
+## counts/other
+
+pop3over - The county's population over the age of three. Used to calculate school enrollment. 
+
+school_enrolled - County's population of children enrolled in school. 
+
+school_not_enrolled - County's population of children not enrolled in school. 
+
+households - Number of households present within a county; used as the denominator for the income variables for percents. 
+
+pop_under25k - County's number of households earning under $25,000
+
+pop25k_49k - county's number of households earning between $25,000 and $49,999
+
+pop50k_74k - county's number of households earning between $50,000 and $74,999
+
+pop75k_99k - county's number of households earning between $75,000 and $99,999
+
+pop100kover - county's number of households earning over $100,000
+
+median_income - The median income of a county. 
+
+pov_denom - The denominator used to calculate percentages for the poverty line fields 
+
+pov_under2q - The number of households earning under half of the poverty line
+
+pov2q_3q - The number of households earning between half and three-fourths of the poverty line 
+
+pov3q_4q - The number of households earning between three-fourths and the poverty line. 
+
+pov4q_6q - The number of households earning between one to 1.5 times over the poverty line.
+
+pov6q_8q - The number of households earning between over 1.5 and 2 times the poverty line. 
+
+pov_over8q - The number of households earning over 2 times the poverty line. 
+
+
+## Percent fields 
+
+school_enrolled_pct - The percentage of children enrolled in school 
+
+income_under25kpct - The percentage of households earning under $25,000
+
+income25k_49kpct - The percentage of households earning between $25,000 and $49,999
+
+pop50k_74kpct - The percentage of households earning between $50,000 and $74,999
+
+pop75k_99kpct - The percentage of households earning between $75,000 and $99,999
+
+pop100koverpct - The percentage of households earning over $100,000
+
+pov_below_line - The percentage of households below the poverty line 
+
+pov_1_2overline - The percentage of households earning between 1 and 2 times the poverty line 
+
+pov_doubleline - The percentage of households earning over 2 times the poverty line
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 
 
 

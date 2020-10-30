@@ -1,0 +1,165 @@
+--------------------------------------------------------------------------------
+Codebook for Social Explorer report ID: R12665412
+--------------------------------------------------------------------------------
+
+Contents
+    - Table Summary
+    - Data Dictionary
+    - Citation and Use
+
+
+--------------------------------------------------------------------------------
+Table Summary
+--------------------------------------------------------------------------------
+ 
+Survey:           ACS 2018 (5-Year Estimates)
+Dataset:          Social Explorer Tables: ACS 2018 (5-Year Estimates)
+Tables:
+
+      1. School Enrollment for the Population 3 Years and Over
+         Universe:  Population 3 Years and Over
+         Name:      A12004
+         Variables:
+            A12004_001:   Population 3 Years and Over:
+            A12004_002:      Enrolled in School
+            A12004_003:      Not Enrolled in School
+
+
+      2. Household Income (In <DollarYear> Inflation Adjusted Dollars) (Collapsed Version)
+         Universe:  Households
+         Name:      B14001
+         Variables:
+            B14001_001:   Households:
+            B14001_002:      Less than $25,000
+            B14001_003:      $25,000 to $49,999
+            B14001_004:      $50,000 to $74,999
+            B14001_005:      $75,000 to $99,999
+            B14001_006:      $100,000 or More
+
+
+      3. Median Household Income (In <DollarYear> Inflation Adjusted Dollars)
+         Universe:  Households
+         Name:      A14006
+         Variables:
+            A14006_001:   Median Household Income (In 2018 Inflation Adjusted Dollars)
+
+
+      4. Ratio of Income in to Poverty Level
+         Universe:  Population for whom poverty status Is determined
+         Name:      A13004
+         Variables:
+            A13004_001:   Population for Whom Poverty Status Is Determined:
+            A13004_002:      Under .50
+            A13004_003:      .50 to .74
+            A13004_004:      .75 to .99
+            A13004_005:      1.00 to 1.49
+            A13004_006:      1.50 to 1.99
+            A13004_007:      2.00 and Over
+
+
+
+
+
+ 
+ 
+ 
+--------------------------------------------------------------------------------
+Data Dictionary
+--------------------------------------------------------------------------------
+ 
+Variables 
+      FIPS:           FIPS
+      GEOID:          Geographic Identifier
+      NAME:           Name of Area
+      QName:          Qualifying Name
+      STUSAB:         State/U.S.-Abbreviation (USPS)
+      SUMLEV:         Summary Level
+      GEOCOMP:        Geographic Component
+      FILEID:         File Identification
+      LOGRECNO:       Logical Record Number
+      US:             US
+      REGION:         Region
+      DIVISION:       Division
+      STATECE:        State (Census Code)
+      STATE:          State (FIPS)
+      COUNTY:         County
+      COUSUB:         County Subdivision (FIPS)
+      PLACE:          Place (FIPS Code)
+      PLACESE:        Place (State FIPS + Place FIPS)
+      TRACT:          Census Tract
+      BLKGRP:         Block Group
+      CONCIT:         Consolidated City
+      AIANHH:         American Indian Area/Alaska Native Area/Hawaiian Home Land (Census)
+      AIANHHFP:       American Indian Area/Alaska Native Area/Hawaiian Home Land (FIPS)
+      AIHHTLI:        American Indian Trust Land/Hawaiian Home Land Indicator
+      AITSCE:         American Indian Tribal Subdivision (Census)
+      AITS:           American Indian Tribal Subdivision (FIPS)
+      ANRC:           Alaska Native Regional Corporation (FIPS)
+      CBSA:           Metropolitan and Micropolitan Statistical Area
+      CSA:            Combined Statistical Area
+      METDIV:         Metropolitan Division
+      MACC:           Metropolitan Area Central City
+      MEMI:           Metropolitan/Micropolitan Indicator Flag
+      NECTA:          New England City and Town Combined Statistical Area
+      CNECTA:         New England City and Town Area
+      NECTADIV:       New England City and Town Area Division
+      UA:             Urban Area
+      UACP:           Urban Area Central Place
+      CDCURR:         Current Congressional District ***
+      SLDU:           State Legislative District Upper
+      SLDL:           State Legislative District Lower
+      VTD:            Voting District
+      ZCTA3:          ZIP Code Tabulation Area (3-digit)
+      ZCTA5:          ZIP Code Tabulation Area (5-digit)
+      SUBMCD:         Subbarrio (FIPS)
+      SDELM:          School District (Elementary)
+      SDSEC:          School District (Secondary)
+      SDUNI:          School District (Unified)
+      UR:             Urban/Rural
+      PCI:            Principal City Indicator
+      TAZ:            Traffic Analysis Zone
+      UGA:            Urban Growth Area
+      BTTR:           Tribal Tract
+      BTBG:           Tribal Block Group
+      PUMA5:          Public Use Microdata Area - 5% File
+      PUMA1:          Public Use Microdata Area - 1% File
+      A12004_001:     Population 3 Years and Over:
+      A12004_002:     Population 3 Years and Over: Enrolled in School
+      A12004_003:     Population 3 Years and Over: Not Enrolled in School
+      B14001_001:     Households:
+      B14001_002:     Households: Less than $25,000
+      B14001_003:     Households: $25,000 to $49,999
+      B14001_004:     Households: $50,000 to $74,999
+      B14001_005:     Households: $75,000 to $99,999
+      B14001_006:     Households: $100,000 or More
+      A14006_001:     Median Household Income (In 2018 Inflation Adjusted Dollars)
+      A13004_001:     Population for Whom Poverty Status Is Determined:
+      A13004_002:     Population for Whom Poverty Status Is Determined: Under .50
+      A13004_003:     Population for Whom Poverty Status Is Determined: .50 to .74
+      A13004_004:     Population for Whom Poverty Status Is Determined: .75 to .99
+      A13004_005:     Population for Whom Poverty Status Is Determined: 1.00 to 1.49
+      A13004_006:     Population for Whom Poverty Status Is Determined: 1.50 to 1.99
+      A13004_007:     Population for Whom Poverty Status Is Determined: 2.00 and Over
+
+
+
+
+--------------------------------------------------------------------------------
+Citation and Use of Data
+--------------------------------------------------------------------------------
+ 
+All persons are granted a limited license to use this documentation and the
+accompanying data, subject to the following conditions:
+
+* Publications and research reports employing the data
+  must cite it appropriately. The citation should include the following:
+
+	  www.socialexplorer.com
+	  New York City, NY: Social Explorer 2020
+
+
+* Citations should also include the URL for this report:
+
+    http://www.socialexplorer.com/pub/reportdata/HtmlResults.aspx?reportid=R12665412
+
+If you have any questions contact info@socialexplorer.com
