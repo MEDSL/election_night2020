@@ -23,3 +23,7 @@ Information by county on new cases of COVID-19 over time.
 
 Useful spatial R data to create maps by state and county, along with template scripts. 
 
+### historical_elections
+
+Historical election results by county and state
+
