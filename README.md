@@ -9,3 +9,17 @@ The results folder has results for each state, with state folders by state posta
 
 ## Context
 
+The folders related to county and state level information that can be used on the fly for analyses of interest. They are grouped into the following folders: 
+
+### acs_demos
+
+Information related to American Community Surveys of demographics of interest. These include information for age, sex, race, education, income, poverty level, and school enrollment in both counts and percentages. 
+
+### covid 
+
+Information by county on new cases of COVID-19 over time. 
+
+### maps
+
+Useful spatial R data to create maps by state and county, along with template scripts. 
+
