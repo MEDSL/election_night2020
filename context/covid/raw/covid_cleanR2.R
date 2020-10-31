@@ -72,3 +72,4 @@ county_df2$deaths_per100k <- county_df2$deaths_per_cap*100000
 saveRDS(county_df2, "covid_county_ts.rds")
 write.csv(county_df2, "covid_county_ts.csv",row.names = FALSE)
 min(county_df2$week)
+names(county_df2)
