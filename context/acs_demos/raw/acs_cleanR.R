@@ -28,6 +28,13 @@ acs_raw$pov_1_2overline <- ((acs_raw$pov4q_6q+acs_raw$pov6q_8q)/acs_raw$pov_deno
 acs_raw$pov_doubleline <- (acs_raw$pov_over8q/acs_raw$pov_denom)*100
 ###str pad 
 acs_raw$Geo_FIPS <- str_pad(acs_raw$Geo_FIPS,width=5,side="left",pad="0")
+if(nrow(acs_raw)>=31){
+  acs_raw <- acs_raw[,-c(6:22)]
+}else{
+  print("Already subsetted")
+}
+
+
 
 ######## writing out csv and rds 
 
