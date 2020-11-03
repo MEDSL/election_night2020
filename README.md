@@ -2,6 +2,11 @@
 
 The election_night2020 repository will act as a place to store election night results as they arise, in addition to election context resources. Therefore, the two folders to share results are resources and context. The following are the descriptions: 
 
+## Scripts: 
+
+county_mapR.R - A script for creating county level maps of election results. Uses readlines commands for all but the initial reading of the user's data set in order to guide the user through the process. Strucutred to read files from the master parent directory, set to automatically update according to the unique setup of the user's directory.  
+
+hexmapR.R - A script for creating a national level hexagonal map of election results. Uses readlines commands for all but the initial reading of the user's data set in order to guide the user through the process. Strucutred to read files from the master parent directory, set to automatically update according to the unique setup of the user's directory.  
 
 ## Results
 
