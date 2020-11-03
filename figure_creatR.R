@@ -109,6 +109,17 @@ county_metro2$var_x <- county_metro2[,which(colnames(county_metro2)==variable_se
 county_metro2$var_y <- county_metro2[,which(colnames(county_metro2)==variable_selection_y)]
 county_metro2$var_size <- county_metro2[,which(colnames(county_metro2)==size_selection)]
 
+if(max(county_metro2$var_x,na.rm=T) > 100 | min(county_metro2$var_x,na.rm=T) < 0 ){
+  print("Warning: The x variable is outside the 0 - 100 range. Please modify, or be sure to manually modify the ggplot code.")
+}else{
+  print("X  values appear fine.")
+}
+
+if(max(county_metro2$var_y,na.rm=T) > 100 | min(county_metro2$var_y,na.rm=T) < 0 ){
+  print("Warning: The y variable is outside the 0 - 100 range. Please modify, or be sure to manually modify the ggplot code.")
+}else{
+  print("y  values appear fine.")
+}
 
 
 ###plot here; set to group by metro type 
