@@ -75,6 +75,8 @@ color_df_fxn <- function(dataframe1, party_field, color_vec, dem_breaks_vec){
   return(as.data.frame(dataframe1))
 }
 
+master_data <- color_df_fxn(master_data, dem_pct, party_color_spectrum, dem_breaks )
+
 
 ###creating legend text 
 # add a legend
