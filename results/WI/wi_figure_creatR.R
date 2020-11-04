@@ -17,16 +17,17 @@ medsl_brands <- c("#3791FF","#59CBF5","#C0BA79","#F6573E","#156DD0","#C72654","#
 
 
 #Step 1: Read in data 
-county_metro <- read.csv("context/acs_demos/complete_county_data.csv")
+county_metro <- read.csv("F:/MEDSL/election_night2020/context/acs_demos/complete_county_data.csv")
 county_metro$Geo_FIPS <- str_pad(county_metro$Geo_FIPS, width=5,side="left",pad="0")
+
 
 county_results <- read.csv()  #specify election results here
 
-#county_results <- readRDS("context/historical_elections/county_prez_wide.rds")
-#county_results$dem_pct <- (county_results$democrat/(county_results$democrat+county_results$republican+county_results$other))*100
-#county_results <- as.data.frame(county_results)
-#county_results$total_vote <- county_results$democrat + county_results$republican + county_results$other
-#county_results <- subset(county_results, year==2016)
+county_results <- readRDS("F:/MEDSL/election_night2020/context/historical_elections/county_prez_wide.rds")
+county_results$dem_pct <- (county_results$democrat/(county_results$democrat+county_results$republican+county_results$other))*100
+county_results <- as.data.frame(county_results)
+county_results$total_vote <- county_results$democrat + county_results$republican + county_results$other
+county_results <- subset(county_results, year==2016)
 
 ##Step 2: Specify county FIPs field 
 
@@ -130,7 +131,7 @@ demo_plot <- ggplot(county_metro2,aes(y=var_y,x=var_x,size=var_size,color=metro_
   scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + 
   scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) 
 
-
+demo_plot
 ggsave(paste0(file_demo_plot,sep="", ".png"), plot = demo_plot, scale = 1,
        width = 9, height = 6, units = c("in"), dpi = 600) 
 

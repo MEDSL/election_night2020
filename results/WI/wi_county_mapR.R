@@ -1,7 +1,7 @@
 ###################################################################################
 ####################### Election Results CleanR #################################
 ################################################################################
-library(ggplot2)
+library(ggplot)
 library(maps)
 library(sp)
 library(dplyr)
@@ -10,11 +10,24 @@ library(stringr)
 options(stringsAsFactors = FALSE)
 ################################################################################
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-list.files()
-county_cents <- readRDS("context/maps/counties_centroids.rds")
+wi_path <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+###local paths for data 
+county_path <- "F:/MEDSL/election_night2020/context/acs_demos" 
+elections_path <- "F:/MEDSL/election_night2020/context/historical_elections"
+maps_path <- "F:/MEDSL/election_night2020/context/maps"
+list.files(county_path)
+list.files(elections_path)
+
+county_cents <- readRDS(paste0(maps_path,sep="/","counties_centroids.rds"))
 
 
 #### Step 0: Read in data 
+elec2016 <- readRDS(paste0(elections_path,sep="/","county_prez_wide.rds"))
+elec2016 <- subset(elec2016, state_po=="WI" & year==2016)
+elec2016$dem_pct <- (elec2016$democrat/(elec2016$democrat+elec2016$republican+elec2016$other))*100
+
+master_data <- elec2016 
 master_data <- read.csv() #left blank; this is something the user needs to fille in 
 
 #example 
@@ -23,7 +36,7 @@ master_data <- read.csv() #left blank; this is something the user needs to fille
 #test_data <- subset(test_data, year==2016)
 
 ####This script will be used to create county maps for election night.
-state_codes <- read.csv("context/merge_on_statecodes.csv")
+state_codes <- read.csv("F:/MEDSL/election_night2020/context/merge_on_statecodes.csv")
 
 ##Step 1: Choose state: 
 state_choice <- readline(prompt="Enter state abbreviation: ")
@@ -112,10 +125,10 @@ colpos <- readline(prompt="Enter position of plot (left, bottomleft, topleft, ri
 
 jpeg(paste0(file_plot_name,sep=".","jpeg") ,width=9,height = 6, units = "in", res=600)
 #map('county', state_choice , fill = TRUE, col = "white",ylim=c(min_y,max_y),mar=c(0,0,0,0))
-maps::map('county', state_choicedf$state , fill = TRUE, col = "white", ylim=c(min_y-2,max_y+2),mar=c(2,2,2,2) )
-points(county_cents_sub2$V1,county_cents_sub2$V2,pch=21,bg=county_cents_sub2$color,cex=county_cents_sub2$weight)
+maps::map('county', state_choicedf$state , fill = TRUE, col = "white", ylim=c(min_y-1,max_y+1),mar=c(2,2,2,2) )
+points(county_cents_sub2$V1,county_cents_sub2$V2,pch=21,bg= alpha(county_cents_sub2$color,0.5),cex=county_cents_sub2$weight)
 #legend("bottom", legend = legend.text, 
 #     fill = shades, title = "Per 100k",cex=0.6,bty = "n",ncol=2,xpd=TRUE)
 legend(colpos, legend = legend.text, 
-       fill = party_color_spectrum, title = "Dem % of vote",cex=0.6,bty = "n",ncol=2,xpd = TRUE)
+       fill = party_color_spectrum, title = "Dem % of vote",cex=0.8,bty = "n",ncol=3,xpd = TRUE)
 dev.off()
