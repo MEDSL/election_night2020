@@ -169,3 +169,15 @@ demo_results_plot <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_s
 demo_results_plot
 ggsave(paste0("florida_dem_pct_correlation",sep="", ".png"), plot = demo_results_plot, scale = 1,
        width = 9, height = 6, units = c("in"), dpi = 600) 
+
+demo_results_plotpt <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_size,color=metro_factor)) +
+  geom_point(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
+  guides(size=FALSE)  + labs(title="Florida Correlation between Democratic vote share",x="Clinton %",y="Biden %", color="Metro Type",
+                             caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding."))+
+  scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + 
+  scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) +
+  geom_abline(intercept = 0, slope = 1, color="red", 
+              linetype="dashed", size=1.5) 
+demo_results_plotpt
+ggsave(paste0("fl_dem_pct_correlationpt",sep="", ".png"), plot = demo_results_plotpt, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 

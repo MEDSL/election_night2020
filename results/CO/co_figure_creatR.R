@@ -28,14 +28,15 @@ county_results$dem_pct <- (county_results$democrat/(county_results$democrat+coun
 county_results <- as.data.frame(county_results)
 county_results$total_vote <- county_results$democrat + county_results$republican + county_results$other
 county_results <- subset(county_results, year==2016)
-county_results <- subset(county_results, state_po=="WI")
+county_results <- subset(county_results, state_po=="CO")
 county_results$county <- str_to_upper(county_results$county)
 ###import election 2020 results 
 list.files()
-wi2020 <- read_xlsx("wi_enresults.xlsx",sheet = "11051115am")
-wi2020$county <- str_to_upper(wi2020$county)
-wi2020$dem_pct2020 <- (wi2020$biden/(wi2020$biden+wi2020$trump))*100
-county_results <- merge(county_results,wi2020, by="county",all.x=T )
+co2020 <- read_xlsx("co_results.xlsx", sheet="11051140am")
+co2020$county <- str_to_upper(co2020$county)
+co2020$dem_pct2020 <- (co2020$biden/(co2020$biden+co2020$trump))*100
+co2020$total2020 <- co2020$biden+co2020$trump
+county_results <- merge(county_results,co2020, by="county",all.x=T )
 
 
 ##Step 2: Specify county FIPs field 
@@ -44,7 +45,7 @@ county_field <- readline(prompt="Enter name of column field with the county FIPs
 county_results[,which(colnames(county_results)==county_field)] <- 
   str_pad(county_results[,which(colnames(county_results)==county_field)], width=5,side="left",pad="0")
 ##merging data 
-county_metro <- subset(county_metro, Geo_STUSAB=="wi")
+county_metro <- subset(county_metro, Geo_STUSAB=="co")
 county_metro2 <- merge(county_metro, county_results, by.x="Geo_FIPS", by.y=county_field, all.x=T)
 county_metro2$metro_factor <- factor(county_metro2$metro_type, levels=c("Large Metro","Medium Metro","Small Metro",
                                                                                 "Micro","Noncore"))
@@ -70,7 +71,7 @@ county_metro_sums$metro_factor <- factor(county_metro_sums$metro_type, levels=c(
 natl_metro_plot <- ggplot(county_metro_sums, aes(y=dem_pct,x=metro_factor,fill=metro_factor)) + 
   geom_bar(position="stack", stat="identity") + theme_minimal() + 
   scale_fill_manual(values = medsl_brands[c(1:4,6)],drop=F)  +  scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100))  +
-  labs(title="Democratic Vote Share by Metro Designation, WI 2020",x="Metro Type",y="Democratic vote %", fill="Metro Type",
+  labs(title="Democratic Vote Share by Metro Designation, MI 2020",x="Metro Type",y="Democratic vote %", fill="Metro Type",
        caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding.")) +
   theme(plot.caption = element_text(hjust=0)) 
 natl_metro_plot
@@ -143,10 +144,24 @@ county_metro2$biden2016dif <- county_metro2$dem_pct2020-county_metro2$dem_pct
 summary(county_metro2$biden2016dif)
 View(county_metro2)
 
-#### correlation of vote share 
+###let's now get vote total diff 
+county_metro2$dem_vote_diff <- county_metro2$biden - county_metro2$democrat
+summary(county_metro2$dem_vote_diff)
+democrat_diff_plot <- ggplot(county_metro2,aes(y=dem_vote_diff,x=var_x,size=var_size,color=metro_factor,label=county.y)) +
+  geom_text(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
+  guides(size=FALSE)  + labs(title="Michigan county change in Democratic vote share \nfrom 2016, by race (11/04/2020 3:45 PM)",
+                             x=x_title,y="Change in Democratic Vote share", color="Metro Type",
+                             caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding."))+
+  scale_y_continuous(label=comma, limits = c(-50000,100000)) + 
+  scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) 
+ggsave(paste0("change_in_dem_vote_mi_345pm",sep="", ".png"), plot = democrat_diff_plot, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 
+democrat_diff_plot
+
+###let's do the pct correlation here 
 demo_results_plot <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_size,color=metro_factor,label=county.y)) +
   geom_text(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
-  guides(size=FALSE)  + labs(title="Wisconsin Correlation between Democratic vote share",x="Clinton %",y="Biden %", color="Metro Type",
+  guides(size=FALSE)  + labs(title="Colorado Correlation between Democratic vote share",x="Clinton %",y="Biden %", color="Metro Type",
                              caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding."))+
   scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + 
   scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) +
@@ -154,18 +169,24 @@ demo_results_plot <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_s
               linetype="dashed", size=1.5) 
 
 demo_results_plot
-ggsave(paste0("wisconsin_dem_pct_correlation",sep="", ".png"), plot = demo_results_plot, scale = 1,
-       width = 9, height = 6, units = c("in"), dpi = 600) 
-
+###let's create point version 
 demo_results_plotpt <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_size,color=metro_factor)) +
   geom_point(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
-  guides(size=FALSE)  + labs(title="Wisconsin Correlation between Democratic vote share",x="Clinton %",y="Biden %", color="Metro Type",
+  guides(size=FALSE)  + labs(title="Colorado Correlation between Democratic vote share",x="Clinton %",y="Biden %", color="Metro Type",
                              caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding."))+
   scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + 
   scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) +
   geom_abline(intercept = 0, slope = 1, color="red", 
               linetype="dashed", size=1.5) 
 demo_results_plotpt
-ggsave(paste0("wi_dem_pct_correlationpt",sep="", ".png"), plot = demo_results_plotpt, scale = 1,
+
+
+
+
+
+ggsave(paste0("colorado_dem_pct_correlation",sep="", ".png"), plot = demo_results_plot, scale = 1,
        width = 9, height = 6, units = c("in"), dpi = 600) 
+ggsave(paste0("colorado_dem_pct_correlationpt",sep="", ".png"), plot = demo_results_plotpt, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 
+
 
