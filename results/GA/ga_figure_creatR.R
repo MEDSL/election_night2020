@@ -28,15 +28,15 @@ county_results$dem_pct <- (county_results$democrat/(county_results$democrat+coun
 county_results <- as.data.frame(county_results)
 county_results$total_vote <- county_results$democrat + county_results$republican + county_results$other
 county_results <- subset(county_results, year==2016)
-county_results <- subset(county_results, state_po=="MI")
+county_results <- subset(county_results, state_po=="GA")
 county_results$county <- str_to_upper(county_results$county)
 ###import election 2020 results 
 list.files()
-mi2020 <- read_xlsx("mi_results.xlsx", sheet="345 pm")
-mi2020$county <- str_to_upper(mi2020$county)
-mi2020$dem_pct2020 <- (mi2020$biden/(mi2020$biden+mi2020$trump))*100
-mi2020$total2020 <- mi2020$biden+mi2020$trump
-county_results <- merge(county_results,mi2020, by="county",all.x=T )
+ga2020 <- read_xlsx("ga_results.xlsx", sheet="1104400")
+ga2020$county <- str_to_upper(ga2020$county)
+ga2020$dem_pct2020 <- (ga2020$biden/(ga2020$biden+ga2020$trump))*100
+ga2020$total2020 <- ga2020$biden+ga2020$trump
+county_results <- merge(county_results,ga2020, by="county",all.x=T )
 
 
 ##Step 2: Specify county FIPs field 
@@ -45,7 +45,7 @@ county_field <- readline(prompt="Enter name of column field with the county FIPs
 county_results[,which(colnames(county_results)==county_field)] <- 
   str_pad(county_results[,which(colnames(county_results)==county_field)], width=5,side="left",pad="0")
 ##merging data 
-county_metro <- subset(county_metro, Geo_STUSAB=="mi")
+county_metro <- subset(county_metro, Geo_STUSAB=="ga")
 county_metro2 <- merge(county_metro, county_results, by.x="Geo_FIPS", by.y=county_field, all.x=T)
 county_metro2$metro_factor <- factor(county_metro2$metro_type, levels=c("Large Metro","Medium Metro","Small Metro",
                                                                                 "Micro","Noncore"))
@@ -77,7 +77,7 @@ county_metro_sums$metro_factor <- factor(county_metro_sums$metro_type, levels=c(
 natl_metro_plot <- ggplot(county_metro_sums, aes(y=dem_pct,x=metro_factor,fill=metro_factor)) + 
   geom_bar(position="stack", stat="identity") + theme_minimal() + 
   scale_fill_manual(values = medsl_brands[c(1:4,6)],drop=F)  +  scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100))  +
-  labs(title="Democratic Vote Share by Metro Designation, MI 2020",x="Metro Type",y="Democratic vote %", fill="Metro Type",
+  labs(title="Democratic Vote Share by Metro Designation, GA 2020",x="Metro Type",y="Democratic vote %", fill="Metro Type",
        caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding.")) +
   theme(plot.caption = element_text(hjust=0)) 
 natl_metro_plot

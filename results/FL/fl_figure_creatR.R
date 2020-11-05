@@ -33,7 +33,7 @@ county_results <- subset(county_results, state_po=="FL")
 county_results$county <- str_to_upper(county_results$county)
 ###let's read in the data we have from last night 
 list.files()
-fl2020 <- read_xlsx("fl_results.xlsx")
+fl2020 <- read_xlsx("fl_results.xlsx",sheet="1104515")
 fl2020$county <- str_to_upper(fl2020$county)
 fl2020$dem_pct2020 <- (fl2020$biden/(fl2020$biden+fl2020$trump))*100
 fl2020$total2020 <- fl2020$biden+fl2020$trump
@@ -150,4 +150,22 @@ ggsave(paste0(file_demo_plot,sep="", ".png"), plot = demo_plot, scale = 1,
 county_metro2$biden2016dif <- county_metro2$dem_pct2020-county_metro2$dem_pct
 View(county_metro2)
 
+###create logged vote 
+county_metro2$log2020dem <- log(county_metro2$biden)
+county_metro2$log2016dem <- log(county_metro2$democrat)
+summary(county_metro2$log2016dem)
+###plot of 
+demo_results_plot <- ggplot(county_metro2,aes(y=dem_pct2020,x=dem_pct,size=var_size,color=metro_factor,label=county.y)) +
+  geom_text(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
+  guides(size=FALSE)  + labs(title=main_title,x="Clinton %",y="Biden %", color="Metro Type",
+                             caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding.",
+                                              sep=" ", "\nRed circle reflects Miami-Dade."))+
+  scale_y_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + 
+  scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) +
+  geom_abline(intercept = 0, slope = 1, color="red", 
+              linetype="dashed", size=1.5) + 
+  geom_point(aes(x=63.67511, y=53.68786),  size=20, shape=1, color="red")
 
+demo_results_plot
+ggsave(paste0("florida_dem_pct_correlation",sep="", ".png"), plot = demo_results_plot, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 
