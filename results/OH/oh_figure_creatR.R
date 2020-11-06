@@ -48,9 +48,9 @@ county_results[,which(colnames(county_results)==county_field)] <-
 county_metro <- subset(county_metro, Geo_STUSAB=="oh")
 county_metro2 <- merge(county_metro, county_results, by.x="Geo_FIPS", by.y=county_field, all.x=T)
 county_metro2$metro_factor <- factor(county_metro2$metro_type, levels=c("Large Metro","Medium Metro","Small Metro",
-                                                                                "Micro","Noncore"))
+                                                                             "Micro","Noncore"))
 
-
+saveRDS(county_metro2, "oh_merged_data1.rds")   
 ##step 4: Select democrat and total vote fields 
 dem_count_field <- readline(prompt="Enter name of column field with the Democratic 2 party vote share data, as count : ")
 total_vote_field <- readline(prompt="Enter name of column field with the total 2 party vote share data, as count : ")

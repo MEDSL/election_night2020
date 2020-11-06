@@ -49,7 +49,7 @@ county_metro <- subset(county_metro, Geo_STUSAB=="ga")
 county_metro2 <- merge(county_metro, county_results, by.x="Geo_FIPS", by.y=county_field, all.x=T)
 county_metro2$metro_factor <- factor(county_metro2$metro_type, levels=c("Large Metro","Medium Metro","Small Metro",
                                                                                 "Micro","Noncore"))
-
+saveRDS(county_metro2, "ga_county_results1.rds")
 
 ##step 4: Select democrat and total vote fields 
 dem_count_field <- readline(prompt="Enter name of column field with the Democratic 2 party vote share data, as count : ")
@@ -148,6 +148,22 @@ View(county_metro2)
 ###let's now get vote total diff 
 county_metro2$dem_vote_diff <- county_metro2$biden - county_metro2$democrat
 summary(county_metro2$dem_vote_diff)
+##prop of vote arriving from top 4
+(71813+70183+60499+53827)/541626
+
+###let's do a plot of change in pct support 
+demo_plot_diffct <- ggplot(county_metro2,aes(y=dem_vote_diff,x=var_x,size=var_size,color=metro_factor,label=county.y)) +
+  geom_text(alpha=0.4) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
+  guides(size=FALSE)  + labs(title="Change in Democratic vote county 2020-2016 by race",
+                             x=x_title,y="Change in Vote count for Democrats", color="Metro Type",
+                             caption = paste0(caption_date , "\nMetro areas categorized via National Center for Health Statistics coding."))+
+  scale_y_continuous(label=comma, limits = c(-500,80000)) + 
+  scale_x_continuous(labels = function(x) paste0(x, "%"), limits = c(0,100)) + theme(plot.caption = element_text(hjust=0)) 
+
+demo_plot_diffct
+ggsave(paste0("change_in_dem_vote_ga",sep="", ".png"), plot = demo_plot_diffct, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 
+
 democrat_diff_plot <- ggplot(county_metro2,aes(y=dem_vote_diff,x=var_x,size=var_size,color=metro_factor,label=county.y)) +
   geom_text(alpha=0.6) + scale_color_manual(values = medsl_brands[c(1:4,6)],drop=F) + theme_minimal() +
   guides(size=FALSE)  + labs(title="Michigan county change in Democratic vote share \nfrom 2016, by race (11/04/2020 3:45 PM)",
