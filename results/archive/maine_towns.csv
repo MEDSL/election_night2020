@@ -1,0 +1,431 @@
+Town,County,Population
+Brunswick,Cumberland,"20,495"
+Scarborough,Cumberland,"19,691"
+Windham,Cumberland,"17,816"
+Gorham,Cumberland,"17,181"
+York,York,"12,862"
+Falmouth,Cumberland,"11,988"
+Kennebunk,York,"11,209"
+Orono,Penobscot,"10,700"
+Standish,Cumberland,"10,139"
+Wells,York,"10,073"
+Kittery,York,"9,653"
+Cape Elizabeth,Cumberland,"9,304"
+Lisbon,Androscoggin,"8,853"
+Old Orchard Beach,York,"8,776"
+Topsham,Sagadahoc,"8,751"
+Yarmouth,Cumberland,"8,543"
+Skowhegan,Somerset,"8,478"
+Freeport,Cumberland,"8,316"
+Buxton,York,"8,149"
+Gray,Cumberland,"8,044"
+Waterboro,York,"7,774"
+Cumberland,Cumberland,"7,714"
+Winslow,Kennebec,"7,551"
+Berwick,York,"7,514"
+Farmington,Franklin,"7,456"
+South Berwick,York,"7,415"
+Hampden,Penobscot,"7,388"
+Fairfield,Somerset,"6,542"
+Eliot,York,"6,335"
+Oakland,Kennebec,"6,138"
+Lebanon,York,"6,120"
+Winthrop,Kennebec,"5,921"
+Houlton,Aroostook,"5,882"
+Hermon,Penobscot,"5,799"
+Turner,Androscoggin,"5,748"
+New Gloucester,Cumberland,"5,679"
+Rumford,Oxford,"5,676"
+Poland,Androscoggin,"5,523"
+Bridgton,Cumberland,"5,372"
+Bar Harbor,Hancock,"5,321"
+Paris,Oxford,"5,100"
+Lincoln,Penobscot,"5,031"
+Sabattus,Androscoggin,"5,011"
+Waldoboro,Lincoln,"4,972"
+Norway,Oxford,"4,927"
+Bucksport,Hancock,"4,926"
+Harpswell,Cumberland,"4,872"
+Camden,Knox,"4,860"
+Jay,Franklin,"4,766"
+Warren,Knox,"4,704"
+Madison,Somerset,"4,680"
+North Berwick,York,"4,656"
+Glenburn,Penobscot,"4,590"
+Raymond,Cumberland,"4,526"
+Hollis,York,"4,454"
+Lyman,York,"4,384"
+Millinocket,Penobscot,"4,359"
+Greene,Androscoggin,"4,356"
+Vassalboro,Kennebec,"4,247"
+China,Kennebec,"4,227"
+Sidney,Kennebec,"4,216"
+Arundel,York,"4,167"
+Pittsfield,Somerset,"4,077"
+Oxford,Oxford,"4,046"
+Dover-Foxcroft,Piscataquis,"4,038"
+Monmouth,Kennebec,"4,025"
+Naples,Cumberland,"3,976"
+Fort Kent,Aroostook,"3,965"
+Wilton,Franklin,"3,952"
+Durham,Androscoggin,"3,920"
+Casco,Cumberland,"3,880"
+Madawaska,Aroostook,"3,839"
+Winterport,Waldo,"3,811"
+Dexter,Penobscot,"3,794"
+Limington,York,"3,752"
+North Yarmouth,Cumberland,"3,740"
+Orrington,Penobscot,"3,692"
+Wiscasset,Lincoln,"3,652"
+Kennebunkport,York,"3,567"
+Litchfield,Kennebec,"3,567"
+Richmond,Sagadahoc,"3,396"
+Fryeburg,Oxford,"3,395"
+Rockport,Knox,"3,381"
+West Gardiner,Kennebec,"3,365"
+Fort Fairfield,Aroostook,"3,356"
+Norridgewock,Somerset,"3,324"
+Clinton,Kennebec,"3,322"
+Newport,Penobscot,"3,232"
+Livermore Falls,Androscoggin,"3,129"
+Belgrade,Kennebec,"3,115"
+Bowdoin,Sagadahoc,"3,108"
+Holden,Penobscot,"3,077"
+Boothbay,Lincoln,"3,074"
+Woolwich,Sagadahoc,"3,065"
+Alfred,York,"3,055"
+Milford,Penobscot,"3,007"
+Mechanic Falls,Androscoggin,"2,997"
+Levant,Penobscot,"2,975"
+Bowdoinham,Sagadahoc,"2,915"
+Limerick,York,"2,913"
+Farmingdale,Kennebec,"2,877"
+Corinth,Penobscot,"2,828"
+Harrison,Cumberland,"2,804"
+Carmel,Penobscot,"2,786"
+Thomaston,Knox,"2,776"
+Bristol,Lincoln,"2,714"
+Shapleigh,York,"2,700"
+Chelsea,Kennebec,"2,679"
+Blue Hill,Hancock,"2,664"
+Benton,Kennebec,"2,654"
+Bethel,Oxford,"2,644"
+Searsport,Waldo,"2,626"
+Mexico,Oxford,"2,604"
+Pittston,Kennebec,"2,604"
+St. George,Knox,"2,593"
+Minot,Androscoggin,"2,586"
+Acton,York,"2,561"
+Windsor,Kennebec,"2,538"
+Manchester,Kennebec,"2,528"
+Readfield,Kennebec,"2,520"
+Dixfield,Oxford,"2,476"
+Anson,Somerset,"2,452"
+Jefferson,Lincoln,"2,384"
+Hancock,Hancock,"2,382"
+Leeds,Androscoggin,"2,299"
+Whitefield,Lincoln,"2,281"
+Milo,Piscataquis,"2,257"
+Canaan,Somerset,"2,241"
+Union,Knox,"2,239"
+Phippsburg,Sagadahoc,"2,231"
+Eddington,Penobscot,"2,225"
+Lincolnville,Waldo,"2,223"
+Limestone,Aroostook,"2,219"
+Damariscotta,Lincoln,"2,214"
+Orland,Hancock,"2,205"
+Corinna,Penobscot,"2,176"
+Boothbay Harbor,Lincoln,"2,158"
+Machias,Washington,"2,116"
+Livermore,Androscoggin,"2,108"
+Unity,Waldo,"2,086"
+Mount Desert,Hancock,"2,070"
+Van Buren,Aroostook,"2,058"
+Albion,Kennebec,"2,032"
+Dayton,York,"2,014"
+Buckfield,Oxford,"1,996"
+St. Albans,Somerset,"1,973"
+Deer Isle,Hancock,"1,952"
+Palmyra,Somerset,"1,929"
+Parsonsfield,York,"1,921"
+West Bath,Sagadahoc,"1,893"
+Mapleton,Aroostook,"1,870"
+Veazie,Penobscot,"1,865"
+West Paris,Oxford,"1,817"
+Sebago,Cumberland,"1,781"
+Southwest Harbor,Hancock,"1,772"
+Otisfield,Oxford,"1,762"
+Gouldsboro,Hancock,"1,739"
+Hartland,Somerset,"1,719"
+Newcastle,Lincoln,"1,714"
+Randolph,Kennebec,"1,699"
+Dedham,Hancock,"1,683"
+East Millinocket,Penobscot,"1,673"
+Hope,Knox,"1,671"
+Lamoine,Hancock,"1,647"
+Dresden,Lincoln,"1,639"
+Mount Vernon,Kennebec,"1,635"
+Wales,Androscoggin,"1,630"
+Nobleboro,Lincoln,"1,614"
+South Thomaston,Knox,"1,610"
+Stockton Springs,Waldo,"1,608"
+Brownfield,Oxford,"1,606"
+Hiram,Oxford,"1,606"
+Owls Head,Knox,"1,598"
+Tremont,Hancock,"1,596"
+Washburn,Aroostook,"1,595"
+Greenville,Piscataquis,"1,593"
+Baldwin,Cumberland,"1,587"
+Enfield,Penobscot,"1,571"
+Newfield,York,"1,568"
+Northport,Waldo,"1,554"
+Waterford,Oxford,"1,552"
+Palermo,Waldo,"1,542"
+Trenton,Hancock,"1,529"
+Washington,Knox,"1,523"
+Pownal,Cumberland,"1,522"
+Hudson,Penobscot,"1,520"
+Newburgh,Penobscot,"1,520"
+Cushing,Knox,"1,515"
+Peru,Oxford,"1,509"
+Franklin,Hancock,"1,505"
+Greenbush,Penobscot,"1,500"
+Porter,Oxford,"1,490"
+Guilford,Piscataquis,"1,489"
+Bradley,Penobscot,"1,477"
+Surry,Hancock,"1,459"
+Baileyville,Washington,"1,456"
+Mars Hill,Aroostook,"1,432"
+Cornish,York,"1,412"
+Searsmont,Waldo,"1,406"
+Hebron,Oxford,"1,401"
+New Sharon,Franklin,"1,397"
+Charleston,Penobscot,"1,388"
+Castine,Hancock,"1,373"
+Swanville,Waldo,"1,373"
+Plymouth,Penobscot,"1,361"
+Appleton,Knox,"1,348"
+Kenduskeag,Penobscot,"1,339"
+Chesterville,Franklin,"1,330"
+Medway,Penobscot,"1,326"
+Cornville,Somerset,"1,326"
+Jonesport,Washington,"1,324"
+East Machias,Washington,"1,309"
+Lubec,Washington,"1,296"
+Milbridge,Washington,"1,294"
+Hodgdon,Aroostook,"1,286"
+Sangerville,Piscataquis,"1,285"
+Woodstock,Oxford,"1,263"
+Bradford,Penobscot,"1,257"
+Penobscot,Hancock,"1,251"
+Sullivan,Hancock,"1,249"
+Addison,Washington,"1,234"
+Ashland,Aroostook,"1,234"
+Edgecomb,Lincoln,"1,230"
+Etna,Penobscot,"1,222"
+Easton,Aroostook,"1,221"
+Howland,Penobscot,"1,204"
+Stetson,Penobscot,"1,203"
+Brownville,Piscataquis,"1,198"
+Hartford,Oxford,"1,192"
+Strong,Franklin,"1,191"
+Sedgwick,Hancock,"1,182"
+Burnham,Waldo,"1,178"
+Cherryfield,Washington,"1,172"
+Woodland,Aroostook,"1,157"
+Rangeley,Franklin,"1,153"
+Vinalhaven,Knox,"1,151"
+Wayne,Kennebec,"1,150"
+Dixmont,Penobscot,"1,149"
+Friendship,Knox,"1,144"
+Denmark,Oxford,"1,143"
+Frankfort,Waldo,"1,141"
+Lovell,Oxford,"1,133"
+Fayette,Kennebec,"1,124"
+Steuben,Washington,"1,104"
+Brooks,Waldo,"1,091"
+Machiasport,Washington,"1,079"
+Garland,Penobscot,"1,079"
+Exeter,Penobscot,"1,076"
+Montville,Waldo,"1,047"
+Georgetown,Sagadahoc,"1,045"
+Solon,Somerset,"1,045"
+Frenchville,Aroostook,"1,037"
+Troy,Waldo,"1,037"
+Stonington,Hancock,"1,031"
+Littleton,Aroostook,"1,014"
+Phillips,Franklin,"1,008"
+Athens,Somerset,"1,007"
+Smithfield,Somerset,999
+Patten,Penobscot,994
+Rome,Kennebec,991
+Canton,Oxford,978
+Harrington,Washington,963
+Kingfield,Franklin,963
+Sumner,Oxford,940
+Embden,Somerset,938
+Perry,Washington,935
+Linneus,Aroostook,933
+Liberty,Waldo,929
+Harmony,Somerset,928
+Brooksville,Hancock,925
+Belmont,Waldo,921
+Ogunquit,York,912
+Industry,Franklin,910
+Clifton,Penobscot,908
+Monroe,Waldo,902
+Lee,Penobscot,899
+Thorndike,Waldo,892
+South Bristol,Lincoln,888
+Morrill,Waldo,888
+Bingham,Somerset,881
+Alton,Penobscot,866
+Jackman,Somerset,853
+Waldo,Waldo,842
+Greenwood,Oxford,833
+Eagle Lake,Aroostook,826
+Parkman,Piscataquis,825
+Detroit,Somerset,824
+Brooklin,Hancock,816
+Island Falls,Aroostook,805
+Sherman,Aroostook,805
+Knox,Waldo,805
+Andover,Oxford,804
+Bremen,Lincoln,793
+Pembroke,Washington,792
+Princeton,Washington,792
+New Vineyard,Franklin,775
+Carrabassett Valley,Franklin,773
+Monticello,Aroostook,753
+Freedom,Waldo,729
+Prospect,Waldo,719
+St. Agatha,Aroostook,719
+Westport Island,Lincoln,716
+Alna,Lincoln,715
+New Portland,Somerset,710
+Oakfield,Aroostook,701
+Abbot,Piscataquis,698
+Blaine,Aroostook,690
+Lagrange,Penobscot,689
+Otis,Hancock,668
+Mattawamkeag,Penobscot,667
+Monson,Piscataquis,659
+Mercer,Somerset,659
+Starks,Somerset,629
+Eustis,Franklin,608
+Sebec,Piscataquis,603
+Southport,Lincoln,589
+New Sweden,Aroostook,584
+Bridgewater,Aroostook,583
+Danforth,Washington,576
+Jonesboro,Washington,573
+Vienna,Kennebec,569
+Islesboro,Waldo,567
+Jackson,Waldo,556
+Somerville,Lincoln,553
+Robbinston,Washington,551
+Carthage,Franklin,551
+Verona Island,Hancock,540
+Columbia Falls,Washington,537
+Chester,Penobscot,537
+Wallagrass,Aroostook,527
+Mariaville,Hancock,524
+Westfield,Aroostook,520
+Temple,Franklin,516
+Winter Harbor,Hancock,515
+Marshfield,Washington,508
+Moscow,Somerset,506
+Beals,Washington,494
+Cutler,Washington,492
+Alexander,Washington,486
+New Limerick,Aroostook,484
+Whiting,Washington,478
+Ripley,Somerset,476
+Columbia,Washington,466
+St. Francis,Aroostook,456
+Avon,Franklin,453
+Cambridge,Somerset,447
+Chapman,Aroostook,447
+Grand Isle,Aroostook,446
+Arrowsic,Sagadahoc,440
+Smyrna,Aroostook,427
+Eastbrook,Hancock,421
+Springfield,Penobscot,419
+Burlington,Penobscot,418
+Stow,Oxford,418
+Weld,Franklin,411
+Winn,Penobscot,408
+Castle Hill,Aroostook,398
+Sweden,Oxford,394
+Stacyville,Penobscot,389
+Ludlow,Aroostook,379
+Portage Lake,Aroostook,376
+Perham,Aroostook,367
+Lowell,Penobscot,362
+Roxbury,Oxford,360
+Passadumkeag,Penobscot,360
+North Haven,Knox,353
+Chebeague Island,Cumberland,349
+Newry,Oxford,348
+Waltham,Hancock,344
+Swan's Island,Hancock,330
+Dennysville,Washington,328
+Charlotte,Washington,318
+New Canada,Aroostook,313
+Roque Bluffs,Washington,290
+Caswell,Aroostook,287
+Sorrento,Hancock,272
+Wade,Aroostook,270
+Amherst,Hancock,263
+Merrill,Aroostook,263
+Crystal,Aroostook,257
+Medford,Piscataquis,255
+Hanover,Oxford,252
+Woodville,Penobscot,246
+Wellington,Piscataquis,245
+Stockholm,Aroostook,242
+Long Island,Cumberland,238
+Masardis,Aroostook,238
+Stoneham,Oxford,236
+Topsfield,Washington,227
+Amity,Aroostook,227
+Allagash,Aroostook,225
+Shirley,Piscataquis,224
+Weston,Aroostook,218
+Moose River,Somerset,216
+Whitneyville,Washington,211
+Hamlin,Aroostook,210
+Gilead,Oxford,206
+Dyer Brook,Aroostook,200
+Mount Chase,Penobscot,198
+Meddybemps,Washington,151
+Cooper,Washington,148
+Byron,Oxford,144
+Northfield,Washington,142
+Willimantic,Piscataquis,142
+Orient,Aroostook,141
+Cranberry Isles,Hancock,139
+Vanceboro,Washington,134
+Edinburg,Penobscot,129
+Beaver Cove,Piscataquis,117
+Haynesville,Aroostook,116
+Aurora,Hancock,113
+Bowerbank,Piscataquis,113
+Hammond,Aroostook,113
+Upton,Oxford,111
+Lakeville,Penobscot,103
+Maxfield,Penobscot,102
+Crawford,Washington,98
+Waite,Washington,97
+Wesley,Washington,94
+Hersey,Aroostook,79
+Isle au Haut,Knox,72
+Caratunk,Somerset,67
+Osborn,Hancock,67
+Frenchboro,Hancock,61
+Talmadge,Washington,61
+Westmanland,Aroostook,59
+Great Pond,Hancock,58
+Deblois,Washington,55
+Beddington,Washington,48
+Frye Island,Cumberland,5

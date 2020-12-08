@@ -1,0 +1,46 @@
+---
+title: "Where Biden Won"
+author: "Charles Stewart and John Curiel"
+date: "November 8, 2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A record number of nearly 145 million Americans voted as part of the 2020 Presidential election, with Biden improving upon Democratic performance from 2016 to flip several states and secure an Electoral College Victory. Similar to Trump's victory in 2016, the victory in the batleground states were such that mere tens of thousands of votes put him over the edge, which was also true for Trump in Florida and North Carolina. This brings about the question of __where__ Biden secured his victory across the states. With the initial county level presidential returns data from the states with sufficient returns so far, it is possible to make some inferences. 
+
+## Metropolitan v. non-metro areas 
+
+The traditional [urban-rural divide][https://www.pewsocialtrends.org/2018/05/22/urban-suburban-and-rural-residents-views-on-key-social-and-political-issues/] further polarized since 2016, with Democratic support concentrated within urban areas, and Republican in suburbs and rural areas. We therefore take the presidential election returns data and code them following the [NCHS Urban-Rural classification][https://www.cdc.gov/nchs/data_access/urban_rural.htm#:~:text=Medium%20metro%20counties%20are%20counties,counties%20in%20micropolitan%20statistical%20areas.]: Large metro, medium metro, small metro, micropolitan, and non-core. We match the counties with at least 90% of the returns from 2016 counted so far, and find the difference in percentage support for the Democratic candidate of the two party vote share. We further normalize by state, and identify where Biden performed relative to Clinton in 2016. 
+
+```{r figure1,echo=FALSE,message=FALSE,warning=FALSE}
+#setwd(wd_abs_nc_plots)
+filename1 <- "natl_metro_chgplot.png"
+
+###good, looks like this worked. Now I can proceed 
+```
+!["Democratic changes in support from 2016 by metro designation"](`r filename1`){#id .class width=75% height=75%}
+
+We find that as discussed in media coverage leading up to the election, Biden made [substantive gains in the suburbs][https://www.theguardian.com/us-news/2020/oct/25/biden-trump-polls-elderly-suburban-women-voters]. Biden won an additional a 1.4 percentage points in medium metro areas, and 1.5 percentage points in small metro areas. Although these areas were already on average more Democratic relative to their state’s average Democratic vote share in 2016, Biden substantively improved upon Clinton’s performance. Given the marginal nature of Biden’s victories in Pennsylvania, Georgia, Wisconsin, and Michigan, these improvements clinched him victory.
+
+Worth noting, however, is that Biden appears to have don worse in large metro areas. Biden saw a 0.73 percentage point decline within large metro areas relative to Clinton. Although Trump's base of support remains micropolitan and rural areas, his gains in large metro areas are worth investigating. As it turns out, of the 44 large metro areas within the United States, there were 18 that shifted to Trump since 2016. Of these, Trump increased his performance the most in Miami-Dade Florida with an 11 percentage point gain from 2016. The next top five highest include Bronx, Kings, Manhatten, and Nassau, New York, followed by Los Angeles, California. Also present within these 18 large metro areas are Broward, Palm Beach, Orange, and Hillsborough counties within Florida. These results tentatively suggest that Trump managed to at least win Florida due to his improved performance in large metro areas. The question then arises, can his perofmance be explained through the support of Latinos? News coverage [pre-election][https://www.npr.org/2020/10/24/927384332/trumps-support-from-latino-voters-holds-steady] and [post-election][https://www.nbcnews.com/news/latino/trump-cultivated-latino-vote-florida-it-paid-n1246226] finds that Trump improved his performance amongst Latinos. Are these gains concentrated in Florida alone, or can they be found elsewhere? 
+
+## Trump's Support Among Latinos 
+
+Although we need to be careful with inferring too much from [county level data to the individuals][https://gking.harvard.edu/files/gking/files/part1.pdf], we can at least determine if there is a pattern across counties. We therefore run a simple model to determine if an increased percentage of Latinos within a county predicts decreased Democratic vote share, while controlling for median income, racial segregation, metro designation, and state.  We find that even controlling for potential counfounders, there is a durable correlation between decreased Democratic performance and Latinos. However, the relationship is a curvlinear one. Rather than a 1 to 1 decline in Demoratic support given increased presence of Latinos, the negative nature only really picks up around the 50 percent point mark. This relationship appears to exist across metro deisgnation, seen in non-metro areas as well. 
+
+```{r figure2,echo=FALSE,message=FALSE,warning=FALSE}
+#setwd(wd_abs_nc_plots)
+filename2 <- "democrat_latino_corr.png"
+
+###good, looks like this worked. Now I can proceed 
+```
+!["Democratic changes in support from 2016 by Latino Population"](`r filename2`){#id .class width=75% height=75%}
+
+## What does this mean for 2020 and beyond?
+
+Overall, it appears that Biden pulled through on the Democratic party's hopes in expanding their appeal beyond large metro areas so as to secure a popular vote and Electoral College victory. However, these results suggest that there is the potential for Democratic losses in the future and Republican gains. As noted by Pew in 2016, there is a [generational divide][https://www.pewresearch.org/hispanic/2016/10/11/latinos-and-the-political-parties/] amongst Hispanics, where younger Hispanics tend to be more favroable to the GOP. Our findings support such claims. Insofar as the Republican party hopes to chip away at the increasingly diverse racial coalition of the Democratic party, Latinos are the obvious target. Such a move is likely necessary given that without the boon offered by Latinos, the Republican party is otherwise a rural one. Given that [rural areas are dying off][https://www.washingtonpost.com/business/2019/05/24/real-surprisingly-comforting-reason-rural-america-is-doomed-decline/], there is a point in which the Electoral College bias towards the GOP will not be sufficient to ensure the GOP a chance at competing for the presidency. However, if the GOP canimprove their appeal to Latino voters, then it would be possible to compete and win battelgrounds such as Florida, Arizona, Nevada, and more. 
+
+More research needs to be conducted, but for now, the Democratic strategy to expand their appeal proved sufficient to win the presidency this go around. However, it is more than possible for the GOP to make a comback. Therefore, Democrats should not give into complacency and nor the GOP despair at the recent election. 

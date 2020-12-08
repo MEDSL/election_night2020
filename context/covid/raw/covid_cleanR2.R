@@ -73,3 +73,94 @@ saveRDS(county_df2, "covid_county_ts.rds")
 write.csv(county_df2, "covid_county_ts.csv",row.names = FALSE)
 min(county_df2$week)
 names(county_df2)
+
+###Let's get state data now
+state_df2 <- county_df2 %>% group_by(state,week,st_fips,state_po) %>% 
+  summarise(total_pop=sum(total_pop),cases=sum(cases),deaths=sum(deaths))
+###Now let's get the vars coded 
+state_df2$deaths_per_cap <- state_df2$deaths/state_df2$total_pop
+state_df2$cases_per_cap <- state_df2$cases/state_df2$total_pop
+state_df2$cases_per100k <- state_df2$cases_per_cap*100000 
+state_df2$deaths_per100k <- state_df2$deaths_per_cap*100000 
+saveRDS(state_df2, "covid_state_ts.rds")
+
+
+###Let's create an index now 
+state_index <- matrix(NA, ncol=9, nrow=4)
+state_index[1,1] <- "Deaths per capita"
+state_index[2,1] <- "Cases per capita"
+state_index[3,1] <- "Deaths per 100k"
+state_index[4,1] <- "Cases per 100k"
+##var names 
+state_index[1,2] <- colnames(state_df2)[8]
+state_index[2,2] <- colnames(state_df2)[9]
+state_index[3,2] <- colnames(state_df2)[10]
+state_index[4,2] <- colnames(state_df2)[11]
+###now let's get the jenks for each var 
+library(BAMMtools)
+deathpercap_jenks <- getJenksBreaks(state_df2$deaths_per_cap, 6)
+casespercap_jenks <- getJenksBreaks(state_df2$cases_per_cap, 6)
+deathper100k_jenks <- getJenksBreaks(state_df2$deaths_per100k, 6)
+casesper100k_jenks <- getJenksBreaks(state_df2$cases_per100k, 6)
+###now let's assign the vars 
+for(i in 1:6){
+  state_index[1,i+2] <- deathpercap_jenks[i]
+}
+for(i in 1:6){
+  state_index[2,i+2] <- casespercap_jenks[i]
+}
+for(i in 1:6){
+  state_index[3,i+2] <- deathper100k_jenks[i]
+}
+for(i in 1:6){
+  state_index[4,i+2] <- casesper100k_jenks[i]
+}
+###now let's get the date 
+state_index[,9]  <- as.character(Sys.Date())
+state_index <- as.data.frame(state_index)
+##column names 
+colnames(state_index) <- c("title","var","jenks1","jenks2","jenks3","jenks4","jenks5","jenks6","date_updated")
+###write it out 
+write.csv(state_index, "state_covid_index.csv",row.names = FALSE)
+
+
+####Now counties 
+
+
+county_index <- matrix(NA, ncol=9, nrow=4)
+county_index[1,1] <- "Deaths per capita"
+county_index[2,1] <- "Cases per capita"
+county_index[3,1] <- "Deaths per 100k"
+county_index[4,1] <- "Cases per 100k"
+##var names 
+county_index[1,2] <- colnames(county_df2)[8]
+county_index[2,2] <- colnames(county_df2)[9]
+county_index[3,2] <- colnames(county_df2)[10]
+county_index[4,2] <- colnames(county_df2)[11]
+###now let's get the jenks for each var 
+deathpercap_jenks <- getJenksBreaks(county_df2$deaths_per_cap, 6)
+casespercap_jenks <- getJenksBreaks(county_df2$cases_per_cap, 6)
+deathper100k_jenks <- getJenksBreaks(county_df2$deaths_per100k, 6)
+casesper100k_jenks <- getJenksBreaks(county_df2$cases_per100k, 6)
+###now let's assign the vars 
+for(i in 1:6){
+  county_index[1,i+2] <- deathpercap_jenks[i]
+}
+for(i in 1:6){
+  county_index[2,i+2] <- casespercap_jenks[i]
+}
+for(i in 1:6){
+  county_index[3,i+2] <- deathper100k_jenks[i]
+}
+for(i in 1:6){
+  county_index[4,i+2] <- casesper100k_jenks[i]
+}
+###now let's get the date 
+county_index[,9]  <- as.character(Sys.Date())
+county_index <- as.data.frame(county_index)
+##column names 
+colnames(county_index) <- c("title","var","jenks1","jenks2","jenks3","jenks4","jenks5","jenks6","date_updated")
+###write it out 
+write.csv(county_index, "county_covid_index.csv",row.names = FALSE)
+
+
