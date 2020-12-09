@@ -527,27 +527,86 @@ nyt_counties2$biden_chg <- nyt_counties2$bidenj - nyt_counties2$lag_bidenj
 nyt_counties2$trump_chg <- nyt_counties2$trumpd - nyt_counties2$lag_trumpd
 ##proportion of expected returns 
 nyt_counties2$prop_expect_returned <- (nyt_counties2$total.votes/nyt_counties2$tot_exp_vote)*100
-summary(nyt_counties2$prop_expect_returned)
-###Let's figure out what the oddity is 
-odd_sub <- subset(nyt_counties2,  prop_expect_returned > 200)
-View(odd_sub)
+
 
 summary(nyt_counties2$trump_chg)
 length(which(nyt_counties2$trump_chg<0)) # 338
 length(which(nyt_counties2$biden_chg<0)) # 331
-###subsetting to biden favor chg 
-biden_bias <- subset(nyt_counties2, trump_chg < 0 & trump_chg < biden_chg)
-nrow(biden_bias)/length(which(nyt_counties2$total_vote_chg<0))
-summary(biden_bias$total_vote_chg)
-###Let's save the data 
+
+###Let's get acceleration and dem pct vars 
 nyt_counties2$dem_pct <- (nyt_counties2$bidenj/nyt_counties2$total.votes)*100
 nyt_counties2$dem2party_pct <- (nyt_counties2$bidenj/(nyt_counties2$bidenj+nyt_counties2$trumpd))*100
 nyt_counties2 <- nyt_counties2 %>% group_by(fips) %>% mutate(final_vote=max(total.votes,na.rm=T))
 nyt_counties2$returned_pct <- (nyt_counties2$total.votes/nyt_counties2$final_vote)*100
 
-View(nyt_counties2)
+###acceleration 
+nyt_counties2 <- nyt_counties2 %>% group_by(fips) %>% mutate(lag_vote_chg = lag(total_vote_chg))
+nyt_counties2$tabulate_acceleration <- ((nyt_counties2$total_vote_chg - nyt_counties2$lag_vote_chg)/1000)*4 # this gets us the change in 
+nyt_counties2$tabulate_acceleration_prop <- ((nyt_counties2$total_vote_chg - nyt_counties2$lag_vote_chg))/nyt_counties2$final_vote
+# this gets us the change in 
+nyt_counties2 <- as.data.frame(nyt_counties2)
+###Let's try the gini coefficients 
+library(DescTools)
+nyt_counties2 <- nyt_counties2 %>% group_by(state,interval15min_num) %>% mutate(gini_votes=Gini(returned_pct))
+nyt_counties2$gini_votes[is.na(nyt_counties2$gini_votes)==T] <- 0
+summary(nyt_counties2$gini_votes) #seems to be working; let's check the non-zero entries, which are complete equality. 
+test_sub <- subset(nyt_counties2, state=="PENNSYLVANIA" & gini_votes > 0 & is.na(gini_votes)==FALSE)
+test_sub2 <- subset(test_sub, interval15min_num==50)
+###analyzing these, as expected the gini coefficient is the same for all states for a given time period. This allows us to determine the 
+#proportion of votes. This means that we could get the collapsed data by time 
+state_nyt_gini <- nyt_counties2 %>% 
+  group_by(state,interval15min_num) %>% 
+  summarise(gini_reported=mean(gini_votes,na.rm=T),total.votes=sum(total.votes,na.rm=T), final_vote=sum(final_vote,na.rm=T),
+            bidenj=sum(bidenj,na.rm=T), trumpd=sum(trumpd,na.rm=T))
+state_nyt_gini$prop_reported <- (state_nyt_gini$total.votes/state_nyt_gini$final_vote)*100
+state_nyt_gini$dem_pct <- (state_nyt_gini$bidenj/state_nyt_gini$total.votes)*100
+state_nyt_gini$dem2party_pct <- (state_nyt_gini$bidenj/(state_nyt_gini$trumpd+state_nyt_gini$bidenj))*100
+state_nyt_gini$dem_majority <- 0
+state_nyt_gini$dem_majority[state_nyt_gini$dem2party_pct > 50 ] <- 1
+state_nyt_gini$lead <- "Trump"
+state_nyt_gini$lead[state_nyt_gini$dem_majority==1] <- "Biden"
+#### Let's save data here 
+write.csv(state_nyt_gini, 'results/state_nyt_gini.csv', row.names = FALSE)
+saveRDS(state_nyt_gini, 'results/state_nyt_gini.rds')
+
+### Let's get the time series plots by 
+#note: will need to run theme minimal first in order to prevent the alignment from the other theme cmd from being overwritten 
+##note: adding in alpha within the geom_line section gets rid of teh legend. Can we fix this by placing it in the aes ggplot section? ?
+###Seems like the best path forward is to overlay the text with the geom
+
+gini_state_plot <- ggplot(data=state_nyt_gini, aes(x=interval15min_num,y=gini_reported,group=state, colour=lead)) +
+  geom_line(lwd=1.05,alpha=0.3) +
+  theme_minimal() + 
+  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
+        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45,vjust=0.5)) +
+  scale_color_manual(values = medsl_brands[c(1,6)]) + 
+  guides(colour = FALSE) +
+  scale_x_continuous(breaks = seq(0,576,by=96), 
+                     labels=c("Nov-3", "Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8", "Nov-9"), limits = c(0,576)) + 
+  labs(title="Inequality in county reporting over time, by state",
+       x="Time from polls closing",y="Inequality in reports (gini coef.)",color="Lead",
+       caption = caption_date)  
+  
+gini_state_plot 
+ggsave("state_gini_ts_plot.png", plot = gini_state_plot, scale = 1,
+       width = 9, height = 6, units = c("in"), dpi = 600) 
+
+###Let's rerun, but by party 
+
+
+#1000 votes per hour tabulated by county 
+###Let's save the data 
+
 saveRDS(nyt_counties2,"results/nyt15minute_county_data.rds")
 write.csv(nyt_counties2,"results/nyt15minute_county_data.csv",row.names=FALSE)
+
+###now let's subset to a smaller window of time 
+summary(nyt_counties2$interval15min_num)
+
+
+
+
 ###Let's get final results 
 nyt_counties_final <- nyt_counties2 %>% group_by(fips) %>% slice(which.max(interval15min_num))
 nrow(nyt_counties_final)
@@ -577,53 +636,28 @@ for(i in 1:length(state_vec)){
   temp_ts_plot
   ggsave(paste0(state_vec[i],sep="_", "tabulate_plot",sep="", ".png"), plot = temp_ts_plot, scale = 1,
          width = 9, height = 6, units = c("in"), dpi = 600) 
+  
+  
+  ###acceleration plot 
+  
+  temp_ts_accel_plot <- ggplot(temp_state, aes(x=interval15min_num, y=tabulate_acceleration, group=fips)) +
+    geom_line(alpha=0.4, col=medsl_brands[1], lwd=1.2) + theme_minimal() + ylim(0,400) + 
+    theme(title = element_text(size = rel(1.2), family="Styrene B"), 
+          plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
+          axis.text.x = element_text(angle = 45,vjust=0.5)) +
+    labs(title=paste(str_to_title(state_vec[i]),sep=" ", "acceleration in ballots counted, by county"),
+         x="Time from polls closing",y="1000 ballots counted per hour",
+         caption = caption_date)  +
+    scale_x_continuous(breaks = seq(1,576,by=96), labels=c("Nov-3", "Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8"), limits = c(0,576))
+  temp_ts_accel_plot
+  ggsave(paste0(state_vec[i],sep="_", "acceleration_plot",sep="", ".png"), plot = temp_ts_accel_plot, scale = 1,
+         width = 9, height = 6, units = c("in"), dpi = 600) 
+  
 }
 
-scale_x_date(breaks = c(as.Date("2020-08-02"),as.Date("2020-08-09"),as.Date("2020-08-16"),
-                        as.Date("2020-08-23"),
-                        as.Date("2020-08-30"),as.Date("2020-09-06"),as.Date("2020-09-13"),as.Date("2020-09-20"),
-                        as.Date("2020-09-27"),as.Date("2020-10-04"),as.Date("2020-10-11"), as.Date("2020-10-18"),
-                        as.Date("2020-10-25"),
-                        as.Date("2020-11-02")), limits = as.Date(c('2020-08-02','2020-11-09')),
-             labels=c("Aug-02 \n& before", "Aug-09", "Aug-16","Aug-23","Aug-30","Sep-06","Sep-13","Sep-20",
-                      "Sep-27","Oct-04", "Oct-11", "Oct-18","Oct-25","Nov-01"))
 
 
 
-###good, now let's do the ggplots
-race_nc_plot <- ggplot(race_df, aes(y=total_reqs, x=date2, color=race3)) + 
-  geom_line(lwd=1.2) +
-  geom_point(size=5,alpha=0.7)+theme_minimal() + 
-  labs(title="Total number of absentee ballots \nrequested each week, by race",x="Week",y="Requests",color="Race",
-       caption = caption_date) +
-  scale_color_manual(values = medsl_brands[1:6],drop=F) +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"),legend.direction = "vertical" )+
-  guides(colour = guide_legend(ncol = 1))+ requests_x_scale + 
-  scale_y_continuous(label=comma, limits = c(0,250000)) + theme_medsl2date
-race_nc_plot
-
-table(biden_bias$state)
-
-View(nyt_counties2)
-
-
-###Let's see if we can't use this; 
-nyt_counties$interval15min <- cut(nyt_counties$time, breaks="15 min")
-head(nyt_counties$interval15min) # there are 2731 levels in this factor variable
-sort(unique(nyt_counties$interval15min))[1:100]
-###Let's see if we can get the first interval by state 
-nyt_counties <- nyt_counties %>% group_by(state) %>% mutate(first_time_fac=min(interval15min,na.rm=T))
-
-
-
-dat$by15 = cut(dat$time, breaks="15 min")
-###test data 
-set.seed(4984)
-dat = data.frame(time=seq(as.POSIXct("2016-05-01"), as.POSIXct("2016-05-01") + 60*99, by=60),
-                 count=sample(1:50, 100, replace=TRUE))
-str(dat)
-
-nyt_counties$vote_velocity <- nyt_counties$total.votes
 
 ###Let's now add in the wbm_merge_counties data
 #nyt_counties <- read.csv("wbm_merge_counties.csv")
