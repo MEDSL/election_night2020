@@ -12,6 +12,9 @@ library(chron)
 library(grid)
 library(ggthemes)
 library(ggalt)
+library(zoo)
+library(tidyverse)
+
 options(stringsAsFactors = FALSE)
 ################################################################################
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -573,7 +576,12 @@ saveRDS(state_nyt_gini, 'results/state_nyt_gini.rds')
 #note: will need to run theme minimal first in order to prevent the alignment from the other theme cmd from being overwritten 
 ##note: adding in alpha within the geom_line section gets rid of teh legend. Can we fix this by placing it in the aes ggplot section? ?
 ###Seems like the best path forward is to overlay the text with the geom
-
+grob_biden <- grobTree(textGrob("Biden", x=0.8,  y=0.7, hjust=0,
+                                gp=gpar(col=medsl_brands[1], fontsize=12, fontface="bold")))
+grob_trump <- grobTree(textGrob("Trump", x=0.8,  y=0.6, hjust=0,
+                                gp=gpar(col=medsl_brands[6], fontsize=12, fontface="bold")))
+grob_title <- grobTree(textGrob("Lead in results", x=0.7,  y=0.8, hjust=0,
+                                gp=gpar(col="black", fontsize=14, fontface="bold")))
 gini_state_plot <- ggplot(data=state_nyt_gini, aes(x=interval15min_num,y=gini_reported,group=state, colour=lead)) +
   geom_line(lwd=1.05,alpha=0.3) +
   theme_minimal() + 
@@ -583,26 +591,53 @@ gini_state_plot <- ggplot(data=state_nyt_gini, aes(x=interval15min_num,y=gini_re
   scale_color_manual(values = medsl_brands[c(1,6)]) + 
   guides(colour = FALSE) +
   scale_x_continuous(breaks = seq(0,576,by=96), 
-                     labels=c("Nov-3", "Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8", "Nov-9"), limits = c(0,576)) + 
+                     labels=c("Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8", "Nov-9", "Nov-10"), limits = c(0,576)) + ylim(0.05,1)+
   labs(title="Inequality in county reporting over time, by state",
        x="Time from polls closing",y="Inequality in reports (gini coef.)",color="Lead",
-       caption = caption_date)  
+       caption = caption_date)  + annotation_custom(grob_biden) + annotation_custom(grob_trump) + annotation_custom(grob_title)
   
 gini_state_plot 
-ggsave("state_gini_ts_plot.png", plot = gini_state_plot, scale = 1,
+ggsave("results/plots/state_gini_ts_plot_party.png", plot = gini_state_plot, scale = 1,
        width = 9, height = 6, units = c("in"), dpi = 600) 
 
-###Let's rerun, but by party 
+###Let's get means by for period between nov 4 and 5 
+nov4to5data <- subset(state_nyt_gini, interval15min_num >= 96 & interval15min_num  <= 192)
+nov4to5data_sum <- nov4to5data %>% group_by(state) %>% summarise(mean(gini_reported))
+###
 
+
+
+summary(nov4to5data_sum$`mean(gini_reported)`)
+View(nov4to5data_sum)
 
 #1000 votes per hour tabulated by county 
+
+###now let's subset to a smaller window of time 
+summary(nyt_counties2$interval15min_num)
+nyt_counties2$time_num <- as.numeric(as.POSIXct(as.character(nyt_counties2$interval15min)))
+nyt_counties2 <- nyt_counties2 %>% group_by(fips) %>% fill(time_num, .direction="down") 
+nyt_counties2$time_num[is.na(nyt_counties2$interval15min)==T] <- 
+  (nyt_counties2$time_num+(nyt_counties2$interval15min_num*900))[is.na(nyt_counties2$interval15min)==T]
+nyt_counties2$chr_time <- as.POSIXlt(nyt_counties2$time_num, origin = "1970-01-01")
+nyt_counties2$chr_time2 <- format(strptime(as.character(nyt_counties2$chr_time), "%Y-%m-%d %H:%M:%S"),"%b-%d %H:%M" )
+###Let's get final lead var 
+nyt_counties2$dem_majority <- 0
+nyt_counties2$dem_majority[nyt_counties2$dem2party_pct>50] <- 1 
+nyt_counties2$lead <- "Trump"
+nyt_counties2$lead[nyt_counties2$dem_majority==1] <- "Biden"
+nyt_counties2 <- nyt_counties2 %>% group_by(fips) %>% mutate(last_lead=last(lead))
+#View(nyt_counties2)
+
 ###Let's save the data 
 
 saveRDS(nyt_counties2,"results/nyt15minute_county_data.rds")
 write.csv(nyt_counties2,"results/nyt15minute_county_data.csv",row.names=FALSE)
 
-###now let's subset to a smaller window of time 
-summary(nyt_counties2$interval15min_num)
+##reading in 
+nyt_counties2 <- readRDS("results/nyt15minute_county_data.rds")
+#test_Date <- "2020-11-03 6:56:00"
+#format(strptime(as.character(test_Date), "%Y-%m-%d %H:%M"),"%b-%d %H:%M" )
+
 
 
 
@@ -619,41 +654,76 @@ write.csv(nyt_counties_final, "nyt_counties_final12042020.csv",row.names = FALSE
 
 
 #### we will now want to move onto figures, in line with what we talked about
+grob_biden2 <- grobTree(textGrob("Biden", x=0.8,  y=0.4, hjust=0,
+                                gp=gpar(col=medsl_brands[1], fontsize=12, fontface="bold")))
+grob_trump2 <- grobTree(textGrob("Trump", x=0.8,  y=0.3, hjust=0,
+                                gp=gpar(col=medsl_brands[6], fontsize=12, fontface="bold")))
+grob_title2 <- grobTree(textGrob("Lead in results", x=0.7,  y=0.5, hjust=0,
+                                gp=gpar(col="black", fontsize=14, fontface="bold")))
 setwd("results/plots/county_tabulate")
+
+state_vec <- sort(unique(nyt_counties2$state))
+library(scales)
+nyt_counties2$posix_time <- as.POSIXct.POSIXlt(nyt_counties2$chr_time)
+str(nyt_counties2$posix_time)
+#setwd("F:/MEDSL/election_night2020/results/plots/county_acceleration")
 for(i in 1:length(state_vec)){
+  svMisc::progress((i/51)*100)
   temp_state <- subset(nyt_counties2, state==state_vec[i])
-  temp_state <- temp_state %>% group_by(fips) %>% mutate(final_vote=max(total.votes,na.rm=T))
-  temp_ts_plot <- ggplot(temp_state, aes(x=interval15min_num, y=returned_pct, group=fips)) +
-    geom_line(alpha=0.4, col=medsl_brands[1], lwd=1.2) + theme_minimal() + 
+  temp_state <- as.data.frame(temp_state)
+  temp_state <- subset(temp_state, interval15min_num >= 48)
+  #let's just go with manual 
+  temp_ts_plot <- ggplot(temp_state, aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead)) +
+    geom_line(alpha=0.4,lwd=1.2) + theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)]) +
+    guides(colour = FALSE) +
     theme(title = element_text(size = rel(1.2), family="Styrene B"), 
           plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
           axis.text.x = element_text(angle = 45,vjust=0.5)) +
     labs(title=paste(str_to_title(state_vec[i]),sep=" ", "time to tabulate ballots, by county"),
          x="Time from polls closing",y="% tabulated",
-         caption = caption_date)  +
-    scale_x_continuous(breaks = seq(1,576,by=96), labels=c("Nov-3", "Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8"), limits = c(0,576))
-  ###we want to go with intervals of 96, which would be one day 
+         caption = caption_date)  + ylim(0,100) + annotation_custom(grob_title2) + annotation_custom(grob_biden2) +
+    annotation_custom(grob_trump2)  +
+    scale_x_continuous(breaks = seq(48,624,by=96), 
+                       labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
+                                "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
+                       limits = c(48,624)) 
   temp_ts_plot
+
   ggsave(paste0(state_vec[i],sep="_", "tabulate_plot",sep="", ".png"), plot = temp_ts_plot, scale = 1,
          width = 9, height = 6, units = c("in"), dpi = 600) 
   
   
-  ###acceleration plot 
   
-  temp_ts_accel_plot <- ggplot(temp_state, aes(x=interval15min_num, y=tabulate_acceleration, group=fips)) +
-    geom_line(alpha=0.4, col=medsl_brands[1], lwd=1.2) + theme_minimal() + ylim(0,400) + 
+  ###acceleration plot 
+ grob_biden3 <- grobTree(textGrob("Biden", x=0.8,  y=0.7, hjust=0,
+                                   gp=gpar(col=medsl_brands[1], fontsize=12, fontface="bold")))
+  grob_trump3 <- grobTree(textGrob("Trump", x=0.8,  y=0.6, hjust=0,
+                                   gp=gpar(col=medsl_brands[6], fontsize=12, fontface="bold")))
+ grob_title3 <- grobTree(textGrob("Lead in results", x=0.7,  y=0.8, hjust=0,
+                                   gp=gpar(col="black", fontsize=14, fontface="bold")))
+  
+  temp_ts_accel_plot <- ggplot(temp_state, aes(x=interval15min_num, y=tabulate_acceleration, group=fips,col=last_lead)) +
+    geom_line(alpha=0.4, lwd=1.2) + theme_minimal()  + scale_color_manual(values = medsl_brands[c(1,6)]) + 
     theme(title = element_text(size = rel(1.2), family="Styrene B"), 
           plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-          axis.text.x = element_text(angle = 45,vjust=0.5)) +
+          axis.text.x = element_text(angle = 45,vjust=0.5)) + guides(color=FALSE) +
+    annotation_custom(grob_title3) + annotation_custom(grob_biden3) + annotation_custom(grob_trump3) + 
     labs(title=paste(str_to_title(state_vec[i]),sep=" ", "acceleration in ballots counted, by county"),
          x="Time from polls closing",y="1000 ballots counted per hour",
          caption = caption_date)  +
-    scale_x_continuous(breaks = seq(1,576,by=96), labels=c("Nov-3", "Nov-4", "Nov-5", "Nov-6", "Nov-7", "Nov-8"), limits = c(0,576))
-  temp_ts_accel_plot
+    scale_x_continuous(breaks = seq(48,624,by=96), 
+                       labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
+                                "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
+                       limits = c(48,624))  +
+    coord_cartesian(ylim = c(21, 400), xlim = c(0,576))
+ temp_ts_accel_plot
   ggsave(paste0(state_vec[i],sep="_", "acceleration_plot",sep="", ".png"), plot = temp_ts_accel_plot, scale = 1,
          width = 9, height = 6, units = c("in"), dpi = 600) 
   
 }
+
+###Let's create the 6 states of interest: AZ, MI, PA, WI , NC, FL . Let's do a 4 by 4 and 
+
 
 
 
