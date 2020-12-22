@@ -352,7 +352,7 @@ state_vec <- sort(unique(nyt_counties2$state))
 library(scales)
 nyt_counties2$posix_time <- as.POSIXct.POSIXlt(nyt_counties2$chr_time)
 str(nyt_counties2$posix_time)
-#setwd("F:/MEDSL/election_night2020/results/plots/county_acceleration")
+setwd("F:/MEDSL/election_night2020/results/plots/county_acceleration")
 for(i in 1:length(state_vec)){
   svMisc::progress((i/51)*100)
   temp_state <- subset(nyt_counties2, state==state_vec[i])
@@ -394,22 +394,23 @@ for(i in 1:length(state_vec)){
     annotation_custom(grob_title3) + annotation_custom(grob_biden3) + annotation_custom(grob_trump3) + 
     labs(title=paste(str_to_title(state_vec[i]),sep=" ", "acceleration in ballots counted, by county"),
          x="Time from polls closing",y="1000 ballots counted per hour",
-         caption = caption_date)  +
-    scale_x_continuous(breaks = seq(48,624,by=96), 
-                       labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                                "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                       limits = c(48,624))  +
-    coord_cartesian(ylim = c(21, 400), xlim = c(0,576))
+         caption = caption_date) + 
+    ylim(0,100) + annotation_custom(grob_title3) + annotation_custom(grob_biden3) + annotation_custom(grob_trump3) + 
+    scale_x_continuous(breaks = seq(0,144,by=24), 
+                       limits = c(0,144)) 
  temp_ts_accel_plot
   ggsave(paste0(state_vec[i],sep="_", "acceleration_plot",sep="", ".png"), plot = temp_ts_accel_plot, scale = 1,
          width = 9, height = 6, units = c("in"), dpi = 600) 
   
 }
 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+
 ###Let's create the 6 states of interest: AZ, MI, PA, WI , NC, FL . Let's do a 4 by 4 and 
 #let's just go with manual 
-az_tabulate <- ggplot(data = subset(nyt_counties2, state=="ARIZONA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                       aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+az_tabulate <- ggplot(data = subset(nyt_counties2, state=="ARIZONA" &  (interval15min_num %% 8 )==0), 
+                       aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
   geom_line(alpha=0.4,lwd=1.2) +
   geom_point(alpha=0.4) + guides(size=FALSE) +
   theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)],name="Winner") +
@@ -417,14 +418,12 @@ az_tabulate <- ggplot(data = subset(nyt_counties2, state=="ARIZONA" & interval15
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="Arizona",
-       x="Time from polls closing", y="% reported")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
+       x="Hours from polls closing", y="% reported")  + ylim(0,100)  +
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
 az_tabulate
-mi_tabulate <- ggplot(data = subset(nyt_counties2, state=="MICHIGAN" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                      aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+mi_tabulate <- ggplot(data = subset(nyt_counties2, state=="MICHIGAN" &  (interval15min_num %% 8 )==0), 
+                      aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
   geom_line(alpha=0.4,lwd=1.2) +
   geom_point(alpha=0.4)  +theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)],name="Winner") +
   guides(size = FALSE) +
@@ -432,14 +431,12 @@ mi_tabulate <- ggplot(data = subset(nyt_counties2, state=="MICHIGAN" & interval1
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="Michigan",
-       x="Time from polls closing", y="% reported")  + ylim(0,100) +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
+       x="Time from polls closing", y="% reported") + ylim(0,100)  +
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
 mi_tabulate
-pa_tabulate <- ggplot(data = subset(nyt_counties2, state=="PENNSYLVANIA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                      aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+pa_tabulate <- ggplot(data = subset(nyt_counties2, state=="PENNSYLVANIA" & (interval15min_num %% 8 )==0), 
+                      aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
   geom_line(alpha=0.4,lwd=1.2) + 
   geom_point(alpha=0.4) +theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)],name="Winner") +
   guides(size = FALSE) +
@@ -447,26 +444,22 @@ pa_tabulate <- ggplot(data = subset(nyt_counties2, state=="PENNSYLVANIA" & inter
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="Pennsylvania",
-       x="Time from polls closing", y="% reported")  + ylim(0,100) + 
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
+       x="Hours from polls closing", y="% reported")  + ylim(0,100)  +
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
 pa_tabulate
-wi_tabulate <- ggplot(data = subset(nyt_counties2, state=="WISCONSIN" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                      aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
-  geom_line(alpha=0.4,lwd=1.2) +
+wi_tabulate <- ggplot(data = subset(nyt_counties2, state=="WISCONSIN" &  (interval15min_num %% 8 )==0), 
+                      aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+  geom_line(alpha=0.2,lwd=1.2) +
   geom_point(alpha=0.4) + theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)], name="Winner") +
   guides(size = FALSE) +
   theme(title = element_text(size = rel(1.2), family="Styrene B"), 
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="Wisconsin",
-       x="Time from polls closing", y="% reported")  + ylim(0,100) + 
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
+       x="Hours from polls closing", y="% reported")  + ylim(0,100)  +
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
 wi_tabulate
 
 #save
@@ -482,13 +475,13 @@ g_reported <- annotate_figure(g_reported, top=text_grob("Time to report ballots 
 
 ggsave("results/plots/battle_ground_slowreports.png",  g_reported,width=12,height=12,units=c("in")) #saves g
 g_reported
-pa_sub <- subset(nyt_counties2, state=="PENNSYLVANIA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0)
-pa_sub <- subset(pa_sub, interval15min_num==624)
+#pa_sub <- subset(nyt_counties2, state=="PENNSYLVANIA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0)
+#pa_sub <- subset(pa_sub, interval15min_num==624)
 #View(pa_sub)
 
 ###Let's do fl and nc now 
-fl_tabulate <- ggplot(data = subset(nyt_counties2, state=="FLORIDA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                      aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+fl_tabulate <- ggplot(data = subset(nyt_counties2, state=="FLORIDA" & (interval15min_num %% 8 )==0), 
+                      aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
   geom_line(alpha=0.4,lwd=1.2) +
   geom_point(alpha=0.4) + theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)], name="Winner") +
   guides(size = FALSE) +
@@ -496,13 +489,11 @@ fl_tabulate <- ggplot(data = subset(nyt_counties2, state=="FLORIDA" & interval15
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="Florida",
-       x="Time from polls closing", y="% reported", caption=caption_date)  + ylim(0,100) + 
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-nc_tabulate <- ggplot(data = subset(nyt_counties2, state=="NORTH CAROLINA" & interval15min_num >= 48 & (interval15min_num %% 8 )==0), 
-                      aes(x= interval15min_num, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
+       x="Hours from polls closing", y="% reported", caption=caption_date)  + ylim(0,100) + 
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
+nc_tabulate <- ggplot(data = subset(nyt_counties2, state=="NORTH CAROLINA" &  (interval15min_num %% 8 )==0), 
+                      aes(x= hours_from_close2, y=returned_pct, group=fips, col=last_lead, size=total.votes)) +
   geom_line(alpha=0.4,lwd=1.2) +
   geom_point(alpha=0.4) + theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)], name="Winner") +
   guides(size = FALSE) +
@@ -510,11 +501,9 @@ nc_tabulate <- ggplot(data = subset(nyt_counties2, state=="NORTH CAROLINA" & int
         plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 45,vjust=0.5)) +
   labs(title="North Carolina",
-       x="Time from polls closing", y="% reported")  + ylim(0,100) + 
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
+       x="Hours from polls closing", y="% reported")  + ylim(0,100) + 
+  scale_x_continuous(breaks = seq(0,144,by=24), 
+                     limits = c(0,144)) 
 nc_tabulate
 fl_tabulate
 g_reported2 <- ggpubr::ggarrange(fl_tabulate, nc_tabulate,  
@@ -535,122 +524,13 @@ summary(wi_sub$returned_pct)
 
 
 ####Let's now create a plot of the states of interest and the dem shift over the night ; both the individual counties and the state ave. 
-az_state <- subset(nyt_counties2, state=="ARIZONA")
-az_state <- az_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-
-az_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="ARIZONA"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=az_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Arizona",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-az_demshift
-###Michigan 
-mi_state <- subset(nyt_counties2, state=="MICHIGAN")
-mi_state <- mi_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-
-
-mi_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="MICHIGAN"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=mi_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Michigan",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-mi_demshift
-###Pennsylvania 
-
-pa_state <- subset(nyt_counties2, state=="PENNSYLVANIA")
-pa_state <- pa_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-pa_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="PENNSYLVANIA"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=pa_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Pennsylvania",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-pa_demshift
-
-####Wisconsin
-wi_state <- subset(nyt_counties2, state=="WISCONSIN")
-wi_state <- wi_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-wi_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="WISCONSIN"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=wi_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Wisconsin",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-wi_demshift
-
-####Let's create a 2 by 2 plot now 
-g_demshift <- ggpubr::ggarrange(az_demshift, mi_demshift,pa_demshift,wi_demshift,  
-                                 common.legend=TRUE, legend="bottom" ) #generates g
-g_demshift2 <- annotate_figure(g_demshift, top=text_grob("Democratic vote share by county over time",size=14,face="bold") )
-ggsave("results/plots/battle_groundmidwest_demshift.png",  g_demshift2,width=12,height=12,units=c("in")) #saves g
-
 
 ###Let's now do FL and NC 
 ###FL
-fl_state <- subset(nyt_counties2, state=="FLORIDA")
-fl_state <- fl_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-fl_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="FLORIDA"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=fl_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Florida",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-fl_demshift
+
 
 ###NC
-nc_state <- subset(nyt_counties2, state=="NORTH CAROLINA")
-nc_state <- nc_state %>% group_by(interval15min_num) %>% summarise(dem2party_pct = (sum(bidenj,na.rm=T)/sum(bidenj+trumpd,na.rm=T))*100 )
-nc_demshift <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="NORTH CAROLINA"), 
-            aes(x= interval15min_num, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  +
-  geom_line(data=nc_state, aes(x=interval15min_num,y=dem2party_pct), alpha=0.8, lwd=2.2, col=medsl_brands[1] ) + theme_minimal() +
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="North Carolina",
-       x="Time from polls closing", y="Democratic 2-party vote %")  + ylim(0,100)  +
-  scale_x_continuous(breaks = seq(48,624,by=96), 
-                     labels=c("Nov-3 \n 6 PM", "Nov-4 \n 6 PM", "Nov-5 \n 6 PM", "Nov-6 \n 6 PM",
-                              "Nov-7 \n 6 PM", "Nov-8 \n 6 PM", "Nov-9 \n 6 PM"), 
-                     limits = c(48,624)) 
-nc_demshift
+
 
 ###export 
 flnc_demshift <- ggpubr::ggarrange(fl_demshift, nc_demshift, 
@@ -686,115 +566,6 @@ az_state <- subset(az_state, is.na(dem2party_pct)==FALSE)
 ####Let's see if we can do a pct reported and hours plot 
 nyt_counties2$twoparty_vote <- nyt_counties2$bidenj+nyt_counties2$trumpd
 ###Arizona
-az_state <- subset(nyt_counties2, state=="ARIZONA")
-az_state$round_report_pct <- round(az_state$returned_pct,0)
-az_state <- az_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(az_state)[colnames(az_state)=="round_report_pct"] <- "returned_pct"
-az_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="ARIZONA"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=az_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Arizona",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-az_demcounty_cor
-
-###Michigan
-mi_state <- subset(nyt_counties2, state=="MICHIGAN")
-mi_state$round_report_pct <- round(mi_state$returned_pct,0)
-mi_state <- mi_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(mi_state)[colnames(mi_state)=="round_report_pct"] <- "returned_pct"
-mi_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="MICHIGAN"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=mi_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Michigan",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-mi_demcounty_cor
-
-###Pennsylvania
-pa_state <- subset(nyt_counties2, state=="PENNSYLVANIA")
-pa_state$round_report_pct <- round(pa_state$returned_pct,0)
-pa_state <- pa_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(pa_state)[colnames(pa_state)=="round_report_pct"] <- "returned_pct"
-pa_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="PENNSYLVANIA"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=pa_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Pennsylvania",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-pa_demcounty_cor
-
-###Wisconsin
-wi_state <- subset(nyt_counties2, state=="WISCONSIN")
-wi_state$round_report_pct <- round(wi_state$returned_pct,0)
-wi_state <- wi_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(wi_state)[colnames(wi_state)=="round_report_pct"] <- "returned_pct"
-wi_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="WISCONSIN"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=wi_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Wisconsin",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-wi_demcounty_cor
-
-####Florida
-fl_state <- subset(nyt_counties2, state=="FLORIDA")
-fl_state$round_report_pct <- round(fl_state$returned_pct,0)
-fl_state <- fl_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(fl_state)[colnames(fl_state)=="round_report_pct"] <- "returned_pct"
-fl_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="FLORIDA"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=fl_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="Florida",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-fl_demcounty_cor
-
-###North Carolina
-nc_state <- subset(nyt_counties2, state=="NORTH CAROLINA")
-nc_state$round_report_pct <- round(nc_state$returned_pct,0)
-nc_state <- nc_state %>% group_by(round_report_pct) %>% summarise(dem2party_pct = (max(bidenj,na.rm=T)/max(twoparty_vote,na.rm=T))*100 )
-colnames(nc_state)[colnames(nc_state)=="round_report_pct"] <- "returned_pct"
-nc_demcounty_cor <- ggplot() +
-  geom_line(data = subset(nyt_counties2, state=="NORTH CAROLINA"), 
-            aes(x= returned_pct, y=dem2party_pct, group=fips) ,alpha=0.6,lwd=1.2,  col="lightgray")  + theme_minimal() +
-  geom_line(data=nc_state, aes( y=dem2party_pct,x=returned_pct ), col=medsl_brands[1],alpha=0.8,lwd=2.2 ) + 
-  theme(title = element_text(size = rel(1.2), family="Styrene B"), 
-        plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45,vjust=0.5)) +
-  labs(title="North Carolina",
-       x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
-nc_demcounty_cor
-
-####Let's create the grid plots now for th
-gg_pct_rpt_midw <- ggpubr::ggarrange(az_demcounty_cor, mi_demcounty_cor, pa_demcounty_cor, wi_demcounty_cor,  
-                                common.legend=TRUE, legend="bottom" ) #generates g
-
-gg_pct_rpt_midw <- annotate_figure(gg_pct_rpt_midw, top=text_grob("Democratic voteshare by county percent reported",size=14,face="bold"))
-
-ggsave("results/plots/battle_groundmidw_pctreport_by_dem.png",  gg_pct_rpt_midw,width=12,height=12,units=c("in")) #saves g
-
-gg_pct_rpt_south <- ggpubr::ggarrange(fl_demcounty_cor, nc_demcounty_cor,  
-                                     common.legend=TRUE, legend="bottom" ) #generates g
-
-gg_pct_rpt_south <- annotate_figure(gg_pct_rpt_south, top=text_grob("Democratic voteshare by county percent reported",size=14,face="bold"))
-
-ggsave("results/plots/battle_groundsouth_pctreport_by_dem.png",  gg_pct_rpt_south,width=12,height=6,units=c("in")) #saves g
 
 ###Let's try the plots grouped by color , last_lead 
 
@@ -824,11 +595,18 @@ mi_demcounty_cor_col <- ggplot(data = subset(nyt_counties2, state=="MICHIGAN"),
        x="% Reported", y="Democratic 2-party vote %")  + ylim(0,100) + xlim(0,100) 
 mi_demcounty_cor_col # I like this. Let's recreate for the other states 
 
+###Let's get the abs ballots 
+sum(nyt_counties_final$abs_bidenj,na.rm=T)/sum(nyt_counties_final$bidenj) # 0.3952951
+sum(nyt_counties_final$abs_trumpd,na.rm=T)/sum(nyt_counties_final$trumpd) # 0.3400335
+(sum(nyt_counties_final$abs_trumpd)+sum(nyt_counties_final$trumpd))/sum(nyt_counties_final$total.votes)
+
+####Let's create a hexagonal map 
+
 ###Pennsylvania 
 ##need to figure out why one point is so democratic yet red 
-test_pa <- subset(nyt_counties2, state=="PENNSYLVANIA")
-test_pa <- subset(test_pa, returned_pct >= 100 & dem2party_pct > 75  )
-View(test_pa)
+#test_pa <- subset(nyt_counties2, state=="PENNSYLVANIA")
+#test_pa <- subset(test_pa, returned_pct >= 100 & dem2party_pct > 75  )
+#View(test_pa)
 ####
 pa_demcounty_cor_col <- ggplot(data = subset(nyt_counties2, state=="PENNSYLVANIA"), 
                                aes(x= returned_pct, y=dem2party_pct, group=fips, col=last_lead) ) +

@@ -64,19 +64,54 @@ summary(nyt_time$dem_diff_pct)
 nyt_time <- nyt_time %>% group_by(state) %>% mutate(lag_total=lag(total,default=0))
 nyt_time$total_change <- nyt_time$total - nyt_time$lag_total
 ##getting final vote by state 
-nyt_time <- nyt_time %>% group_by(state) %>% mutate(final_vote_total=max(total))
+nyt_time <- nyt_time %>% group_by(state) %>% mutate(final_vote_total=last(total))
+nyt_time$party2vote <- nyt_time$dem+nyt_time$rep
+nyt_time <- nyt_time %>% group_by(state) %>% mutate(final2party=last(party2vote))
+nyt_time <- as.data.frame(nyt_time)
+###outstanding 2 party 
+nyt_time$outstanding2party <- nyt_time$final2party - nyt_time$party2vote
+nyt_time$dem2party_prop <- nyt_time$dem/nyt_time$party2vote
+nyt_time$prop2party <- nyt_time$party2vote/nyt_time$final2party
+head(nyt_time)
+###Let's get the two party final total 
+nyt_time$outstanding_total <- (nyt_time$final_vote_total - nyt_time$total)
 ###lwt's retry the overturn calc 
 nyt_time$dem_total_prop <- (nyt_time$dem/nyt_time$total)
 nyt_time$prop_total <- nyt_time$total/nyt_time$final_vote_total
 nyt_time$overturn_dem_count <- nyt_time$dem + 
-  (0.5- nyt_time$prop_total*nyt_time$dem/nyt_time$total)*(nyt_time$outstanding_total)*(1-nyt_time$prop_total)^-1
+  (0.5- (nyt_time$dem/nyt_time$final_vote_total) )*(nyt_time$outstanding_total)*(1-nyt_time$prop_total)^-1
 nyt_time$overturn_dem_pct  <- (nyt_time$overturn_dem_count / nyt_time$outstanding_total)
+summary(nyt_time$overturn_dem_count)
+
+###Let's do the 2 party version 
+nyt_time$overturn_dem_count2 <- nyt_time$dem + 
+  (0.5- nyt_time$dem/nyt_time$final2party)*(nyt_time$outstanding2party)*(1-nyt_time$prop2party)^-1
+nyt_time$overturn_dem_count2pct <- (nyt_time$overturn_dem_count2/nyt_time$outstanding2party)
+summary(nyt_time$overturn_dem_count2pct)
 
 ###let's try something different to see if we can fix the calc 
 nyt_time$abs2party_diff <- abs(nyt_time$dem-nyt_time$rep)
 nyt_time$magnitude_diff_overturn <- nyt_time$abs2party_diff/nyt_time$outstanding_total
+summary(nyt_time$magnitude_diff_overturn)
+###Let's get the data subsetted now 
+nyt_time_call1 <- subset(nyt_time, overturn_dem_pct > 100 | overturn_dem_pct < -100   )
+nyt_time_call1 <- nyt_time_call1 %>% group_by(state) %>% slice(which.min(hours.from.close))###This eqn is definitely off for places like GA
+#####
+nyt_time_call2 <- subset(nyt_time, overturn_dem_count2pct > 100 | overturn_dem_count2pct < -100   )
+nyt_time_call2 <- nyt_time_call2 %>% group_by(state) %>% slice(which.min(hours.from.close))
 
+###ok, let's get the magnitude for v3 
+nyt_time_call3 <- subset(nyt_time, magnitude_diff_overturn > 1   )
+nyt_time_call3 <- nyt_time_call3 %>% group_by(state) %>% slice(which.min(hours.from.close))
 
+###Let's subset the data for 2 
+nyt_time_call2 <- subset(nyt_time_call2, select=c(state, percent.reported, dem_pct,hours.from.close,overturn_dem_count2pct))
+colnames(nyt_time_call2)[2:5] <- c("pct_reported_tcf","dem_pct_tcf","hours_from_close_tcf","overturn_pct")
+nyt_time_call3 <- merge(nyt_time_call3,nyt_time_call2, by="state",all.x=T )
+###Let's find diff in time 
+nyt_time_call3$call_time_diff1 <- nyt_time_call3$hours.from.close - nyt_time_call3$hours_from_close_tcf
+summary(nyt_time_call3$call_time_diff1)
+View(nyt_time_call3)
 
 #nyt_time$win_majority <- (nyt_time$final_vote_total/2)+1
 #nyt_time$overturn_dem_pct <- ((nyt_time$win_majority - nyt_time$dem)/(nyt_time$outstanding_total))*100
