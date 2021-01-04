@@ -607,6 +607,31 @@ sum(nyt_counties_final$abs_trumpd,na.rm=T)/sum(nyt_counties_final$trumpd) # 0.34
 #test_pa <- subset(nyt_counties2, state=="PENNSYLVANIA")
 #test_pa <- subset(test_pa, returned_pct >= 100 & dem2party_pct > 75  )
 #View(test_pa)
+
+####Create a loop to produce plots 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+for(i in 1:length(state_vec)){
+  temp_data_sub <- subset(nyt_counties2, state==state_vec[i])
+  temp_demcounty_cor_col <- ggplot(data = temp_data_sub, 
+                                   aes(x= returned_pct, y=dem2party_pct, group=fips, col=last_lead) ) +
+    geom_line(alpha=0.6,lwd=1.2)  + guides(size=FALSE) + 
+    geom_point(aes(size=total.votes), alpha=0.6) +theme_minimal() + scale_color_manual(values = medsl_brands[c(1,6)],drop=F) +
+    theme(title = element_text(size = rel(1.2), family="Styrene B"), 
+          plot.caption = element_text(hjust=0),panel.grid.minor = element_blank(),
+          axis.text.x = element_text(angle = 45,vjust=0.5)) +
+    labs(title=str_to_title(state_vec[i]),color="Winner",
+         x="% Reported", y="Democratic 2-party vote %",caption = caption_date)  + ylim(0,100) + xlim(0,100) 
+  temp_demcounty_cor_col # I like thi
+  temp_plot_name <- paste0("results/plots/county_pct_tab_dem/",sep="", state_vec[i],sep="_","countyvarplot.png")
+  ggsave(temp_plot_name, plot = temp_demcounty_cor_col, scale = 1,
+         width = 9, height = 6, units = c("in"), dpi = 600) 
+  
+
+}
+
+
+
+
 ####
 pa_demcounty_cor_col <- ggplot(data = subset(nyt_counties2, state=="PENNSYLVANIA"), 
                                aes(x= returned_pct, y=dem2party_pct, group=fips, col=last_lead) ) +
