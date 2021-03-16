@@ -122,6 +122,12 @@ nyt_counties$vote_chg <- nyt_counties$votes - nyt_counties$votes
 ###now let's find vote velocity 
 nyt_counties$vote_velocity <- (nyt_counties$vote_chg/1000)/nyt_counties$time_count_chg
 
+###Check for negative returns 
+#summary(nyt_counties$vote_chg)
+#View(nyt_counties)
+
+
+
 summary(nyt_counties$vote_velocity)
 
 library(zoo)
@@ -172,6 +178,8 @@ nyt_counties2$prop_expect_returned <- (nyt_counties2$total.votes/nyt_counties2$t
 summary(nyt_counties2$trump_chg)
 length(which(nyt_counties2$trump_chg<0)) # 338
 length(which(nyt_counties2$biden_chg<0)) # 331
+length(which(nyt_counties2$total_vote_chg<0))/nrow(nyt_counties2) # 1233 ; 0.0001451712
+0.0001451712*100
 
 ###Let's get acceleration and dem pct vars 
 nyt_counties2$dem_pct <- (nyt_counties2$bidenj/nyt_counties2$total.votes)*100
